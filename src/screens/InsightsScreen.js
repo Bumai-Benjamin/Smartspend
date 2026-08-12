@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { colors, fonts, radii } from "../theme";
 import { useSpend, fmt, short } from "../context/SpendContext";
-import { MONTHS_DATA, CAL_AMTS, TAKEAWAYS } from "../data";
 import DonutChart from "../components/DonutChart";
+import Screen from "../components/Screen";
 
 const VIZ = [
   ["rings", "Rings"],
@@ -20,18 +20,18 @@ function bucket(v) {
 }
 
 export default function InsightsScreen() {
-  const { catRows, totalSpent, dayOfMonth } = useSpend();
+  const { catRows, totalSpent, dayOfMonth, daysInMonth, daysLeft, totalBudget, monthlyTotals, calAmts } = useSpend();
   const [viz, setViz] = useState("rings");
 
   const segments = catRows.map((c) => ({ color: c.c, value: c.s }));
-  const legend = catRows.slice(0, 5).map((c) => ({ ...c, share: Math.round((c.s / totalSpent) * 100) }));
+  const legend = catRows.slice(0, 5).map((c) => ({ ...c, share: totalSpent ? Math.round((c.s / totalSpent) * 100) : 0 }));
 
-  const maxMonth = 2700;
-  const months = [...MONTHS_DATA, { m: "Aug", v: totalSpent, current: true }];
-  const forecast = totalSpent + (Math.max(2400 - totalSpent, 0) / 19) * 19 * 0.92;
+  const maxMonth = Math.max(...monthlyTotals.map((m) => m.v), totalBudget, 1);
+  const dailyPace = dayOfMonth ? totalSpent / dayOfMonth : 0;
+  const forecast = totalSpent + dailyPace * daysLeft;
 
   return (
-    <View style={styles.screen}>
+    <Screen>
       <ScrollView contentContainerStyle={{ paddingBottom: 28 }}>
         <View style={styles.header}>
           <Text style={styles.h1}>Insights</Text>
@@ -54,13 +54,17 @@ export default function InsightsScreen() {
             <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
               <DonutChart segments={segments} centerLabel={short(totalSpent)} centerSub="spent" />
               <View style={{ flex: 1, gap: 9 }}>
-                {legend.map((l) => (
-                  <View key={l.k} style={styles.legendRow}>
-                    <View style={[styles.dotSm, { backgroundColor: l.c }]} />
-                    <Text style={styles.legendName} numberOfLines={1}>{l.n}</Text>
-                    <Text style={styles.legendShare}>{l.share}%</Text>
-                  </View>
-                ))}
+                {totalSpent === 0 ? (
+                  <Text style={styles.cardNote}>Log an expense to see your category breakdown here.</Text>
+                ) : (
+                  legend.map((l) => (
+                    <View key={l.k} style={styles.legendRow}>
+                      <View style={[styles.dotSm, { backgroundColor: l.c }]} />
+                      <Text style={styles.legendName} numberOfLines={1}>{l.n}</Text>
+                      <Text style={styles.legendShare}>{l.share}%</Text>
+                    </View>
+                  ))
+                )}
               </View>
             </View>
           </View>
@@ -70,7 +74,7 @@ export default function InsightsScreen() {
           <View style={styles.card}>
             <Text style={styles.kicker}>Six months</Text>
             <View style={styles.barsRow}>
-              {months.map((m) => (
+              {monthlyTotals.map((m) => (
                 <View key={m.m} style={styles.barCol}>
                   <Text style={styles.barAmt}>{short(m.v)}</Text>
                   <View style={[styles.bar, { height: `${(m.v / maxMonth) * 100}%`, backgroundColor: m.current ? colors.accent : colors.trackAlt }]} />
@@ -80,7 +84,9 @@ export default function InsightsScreen() {
             </View>
             <View style={styles.hr} />
             <Text style={styles.cardNote}>
-              Dashed bar is August so far. On this pace you land near <Text style={{ fontFamily: fonts.bold, color: colors.ink }}>{short(forecast)}</Text> — your calmest month since March.
+              {totalBudget === 0
+                ? "Set a budget on the Plan tab to see a month-end forecast here."
+                : <>This month so far. On today's pace you land near <Text style={{ fontFamily: fonts.bold, color: colors.ink }}>{short(forecast)}</Text> by month end.</>}
             </Text>
           </View>
         )}
@@ -96,10 +102,10 @@ export default function InsightsScreen() {
               {Array.from({ length: 6 }).map((_, i) => (
                 <View key={"pad" + i} style={styles.calCell} />
               ))}
-              {Array.from({ length: 31 }).map((_, i) => {
+              {Array.from({ length: daysInMonth }).map((_, i) => {
                 const day = i + 1;
                 const future = day > dayOfMonth;
-                const v = future ? 0 : CAL_AMTS[day - 1] || 0;
+                const v = future ? 0 : calAmts[day - 1] || 0;
                 const b = future ? { bg: "transparent", fg: "rgba(32,30,29,0.28)" } : bucket(v);
                 return (
                   <View
@@ -115,25 +121,15 @@ export default function InsightsScreen() {
                 );
               })}
             </View>
-            <Text style={styles.cardNote}>Darker is heavier. The 10th is rent; the other dark patch is a Friday habit worth <Text style={{ fontFamily: fonts.bold, color: colors.ink }}>$154</Text> a month.</Text>
+            <Text style={styles.cardNote}>Darker means heavier spending that day.</Text>
           </View>
         )}
-
-        <View style={{ paddingHorizontal: 20, gap: 12, marginTop: 20 }}>
-          {TAKEAWAYS.map((t) => (
-            <View key={t.kicker} style={[styles.takeaway, { backgroundColor: t.bg }]}>
-              <Text style={[styles.takeawayKicker, { color: t.kc }]}>{t.kicker.toUpperCase()}</Text>
-              <Text style={[styles.takeawayText, { color: t.tc }]}>{t.text}</Text>
-            </View>
-          ))}
-        </View>
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
   header: { paddingHorizontal: 20, paddingTop: 8 },
   h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
   sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
@@ -159,8 +155,5 @@ const styles = StyleSheet.create({
   calHead: { width: "12%", textAlign: "center", fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
   calCell: { width: "12%", aspectRatio: 1, borderRadius: 10, alignItems: "center", justifyContent: "center" },
   calDay: { fontFamily: fonts.semibold, fontSize: 10 },
-  calTick: { fontFamily: fonts.regular, fontSize: 8 },
-  takeaway: { borderRadius: radii.md, padding: 18 },
-  takeawayKicker: { fontFamily: fonts.semibold, fontSize: 10.5, letterSpacing: 1.4 },
-  takeawayText: { fontFamily: fonts.heading, fontSize: 15, lineHeight: 20, marginTop: 8 }
+  calTick: { fontFamily: fonts.regular, fontSize: 8 }
 });

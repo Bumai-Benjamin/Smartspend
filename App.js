@@ -5,6 +5,7 @@ import { useFonts as useCaprasimo, Caprasimo_400Regular } from "@expo-google-fon
 import { useFonts as useFigtree, Figtree_400Regular, Figtree_600SemiBold, Figtree_700Bold } from "@expo-google-fonts/figtree";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthProvider } from "./src/context/AuthContext";
 import { SpendProvider } from "./src/context/SpendContext";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { colors } from "./src/theme";
@@ -25,10 +26,12 @@ export default function App() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }} onLayout={onLayout}>
       <SafeAreaProvider>
-        <SpendProvider>
-          <StatusBar style="dark" />
-          <RootNavigator />
-        </SpendProvider>
+        <AuthProvider>
+          <SpendProvider>
+            <StatusBar style="dark" />
+            <RootNavigator />
+          </SpendProvider>
+        </AuthProvider>
       </SafeAreaProvider>
     </View>
   );

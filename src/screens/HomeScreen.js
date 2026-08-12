@@ -3,28 +3,31 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { colors, fonts, radii } from "../theme";
 import { useSpend, fmt, short } from "../context/SpendContext";
-import { UPCOMING } from "../data";
 import ProgressBar from "../components/ProgressBar";
 import HealthCard from "../components/HealthCard";
+import Screen from "../components/Screen";
+
+const MONTH_YEAR = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 export default function HomeScreen({ navigation }) {
-  const { totalSpent, totalBudget, left, pace, heroLine, daysLeft, dayOfMonth, daysInMonth, catRows, addExpense, health } = useSpend();
+  const {
+    totalSpent, totalBudget, left, pace, heroLine, daysLeft, dayOfMonth, daysInMonth,
+    catRows, addExpense, health, upcoming, upcomingTotal, displayName
+  } = useSpend();
 
   const quickAdds = [
-    { label: "Coffee $5.40", c: "#d67f48", cat: "food", amt: 5.4, n: "Blue Bottle" },
-    { label: "Transit $2.75", c: "#8c491a", cat: "trans", amt: 2.75, n: "Metro top-up" },
+    { label: "Coffee $5.40", c: "#d67f48", cat: "food", amt: 5.4, n: "Coffee" },
+    { label: "Transit $2.75", c: "#8c491a", cat: "trans", amt: 2.75, n: "Transit" },
     { label: "Lunch $14", c: "#f6a06b", cat: "food", amt: 14, n: "Lunch" }
   ];
 
-  const upcomingTotal = UPCOMING.reduce((a, u) => a + u.amt, 0);
-
   return (
-    <View style={styles.screen}>
+    <Screen>
       <ScrollView contentContainerStyle={{ paddingBottom: 28 }}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.kicker}>August 2026</Text>
-            <Text style={styles.h1}>Hey Ben</Text>
+            <Text style={styles.kicker}>{MONTH_YEAR}</Text>
+            <Text style={styles.h1}>Hey {displayName}</Text>
           </View>
           <Pressable
             onPress={() => navigation.navigate("AddExpense")}
@@ -51,7 +54,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.heroLine}>{heroLine}</Text>
         </View>
 
-        <HealthCard health={health} />
+        <HealthCard health={health} onSetUp={() => navigation.getParent()?.navigate("Plan", { openHealthInputs: true })} />
 
         <View style={styles.section}>
           <Text style={styles.kicker}>One tap, done</Text>
@@ -98,31 +101,35 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.upcoming}>
           <View style={styles.rowBetween}>
             <Text style={styles.upcomingTitle}>Coming out soon</Text>
-            <Text style={styles.upcomingMeta}>{fmt(upcomingTotal)} left this month</Text>
+            {upcoming.length > 0 && <Text style={styles.upcomingMeta}>{fmt(upcomingTotal)} left this month</Text>}
           </View>
-          <View style={{ gap: 11, marginTop: 12 }}>
-            {UPCOMING.map((u) => (
-              <View key={u.n} style={styles.rowCenter}>
-                <View style={styles.dayBadge}>
-                  <Text style={styles.dayBadgeText}>{u.day}</Text>
+          {upcoming.length === 0 ? (
+            <Text style={styles.upcomingEmpty}>No recurring charges added yet. Add one on the Plan tab.</Text>
+          ) : (
+            <View style={{ gap: 11, marginTop: 12 }}>
+              {upcoming.map((u) => (
+                <View key={u.n} style={styles.rowCenter}>
+                  <View style={styles.dayBadge}>
+                    <Text style={styles.dayBadgeText}>{u.day}</Text>
+                  </View>
+                  <Text style={[styles.rowLabel, { flex: 1, color: "#272e1b" }]}>{u.n}</Text>
+                  <Text style={styles.upcomingAmt}>{fmt(u.amt)}</Text>
                 </View>
-                <Text style={[styles.rowLabel, { flex: 1, color: "#272e1b" }]}>{u.n}</Text>
-                <Text style={styles.upcomingAmt}>{fmt(u.amt)}</Text>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 8 },
   kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
   h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink, marginTop: 5 },
   h2: { fontFamily: fonts.heading, fontSize: 19, color: colors.ink },
+  link: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.accentDark },
   addBtn: { width: 46, height: 46, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center" },
   hero: { margin: 20, marginTop: 22, backgroundColor: colors.tint, borderRadius: radii.lg, padding: 22 },
   heroNum: { fontFamily: fonts.heading, fontSize: 46, letterSpacing: -1, color: colors.ink },
@@ -143,6 +150,7 @@ const styles = StyleSheet.create({
   upcoming: { marginHorizontal: 20, marginTop: 20, marginBottom: 8, backgroundColor: colors.sageBg, borderRadius: radii.md, padding: 18 },
   upcomingTitle: { fontFamily: fonts.heading, fontSize: 16, color: colors.sageDark },
   upcomingMeta: { fontFamily: fonts.semibold, fontSize: 11, color: colors.sage },
+  upcomingEmpty: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.sage, marginTop: 10, lineHeight: 18 },
   dayBadge: { width: 34, height: 34, borderRadius: radii.pill, backgroundColor: "#e1eecc", alignItems: "center", justifyContent: "center", marginRight: 11 },
   dayBadgeText: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sageDark },
   upcomingAmt: { fontFamily: fonts.semibold, fontSize: 13, color: colors.sageDark }

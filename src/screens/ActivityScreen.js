@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { colors, fonts, radii } from "../theme";
 import { useSpend, fmt } from "../context/SpendContext";
 import { CATS } from "../data";
+import Screen from "../components/Screen";
 
 export default function ActivityScreen() {
   const { groups, totalSpent } = useSpend();
@@ -22,11 +23,13 @@ export default function ActivityScreen() {
   const txnCount = groups.reduce((a, g) => a + g.items.length, 0);
 
   return (
-    <View style={styles.screen}>
+    <Screen>
       <ScrollView contentContainerStyle={{ paddingBottom: 28 }}>
         <View style={styles.header}>
           <Text style={styles.h1}>Activity</Text>
-          <Text style={styles.sub}>{fmt(totalSpent)} across {txnCount} charges · bank synced 6 min ago</Text>
+          <Text style={styles.sub}>
+            {txnCount === 0 ? "No expenses logged yet" : `${fmt(totalSpent)} across ${txnCount} charge${txnCount === 1 ? "" : "s"}`}
+          </Text>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterRow} contentContainerStyle={{ gap: 8, paddingHorizontal: 20 }}>
@@ -41,6 +44,11 @@ export default function ActivityScreen() {
         </ScrollView>
 
         <View style={{ paddingHorizontal: 20, gap: 20, marginTop: 16 }}>
+          {filtered.length === 0 && (
+            <Text style={styles.emptyText}>
+              {txnCount === 0 ? "Tap the + on Home to log your first expense." : "Nothing in this category yet."}
+            </Text>
+          )}
           {filtered.map((g) => (
             <View key={g.label}>
               <View style={styles.groupHead}>
@@ -65,15 +73,15 @@ export default function ActivityScreen() {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
   header: { paddingHorizontal: 20, paddingTop: 8 },
   h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
   sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
+  emptyText: { fontFamily: fonts.regular, fontSize: 13.5, color: colors.inkFaint, textAlign: "center", marginTop: 20 },
   filterRow: { marginTop: 18, flexGrow: 0 },
   filterChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.pill, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.hairline },
   filterChipOn: { backgroundColor: colors.ink, borderColor: colors.ink },

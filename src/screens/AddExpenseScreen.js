@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors, fonts, radii } from "../theme";
 import { useSpend, fmt, guessCat, parseAmt, cleanLabel } from "../context/SpendContext";
+import { TABLET_BREAKPOINT, MAX_CONTENT_WIDTH } from "../components/Screen";
 
 const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "\u232b"];
 
@@ -12,6 +14,9 @@ export default function AddExpenseScreen({ navigation }) {
   const [cat, setCat] = useState("food");
   const [typedText, setTypedText] = useState("");
   const [typedCatOverride, setTypedCatOverride] = useState(null);
+  const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const isWide = width >= TABLET_BREAKPOINT;
 
   const catKeys = Object.keys(cats);
   const amtNum = parseFloat(amt || "0") || 0;
@@ -51,7 +56,19 @@ export default function AddExpenseScreen({ navigation }) {
   return (
     <View style={styles.backdrop}>
       <Pressable style={{ flex: 1 }} onPress={() => navigation.goBack()} />
-      <View style={styles.sheet}>
+      <View
+        style={[
+          styles.sheet,
+          {
+            paddingBottom: 30 + insets.bottom,
+            paddingLeft: 20 + insets.left,
+            paddingRight: 20 + insets.right,
+            width: "100%",
+            maxWidth: isWide ? MAX_CONTENT_WIDTH : undefined,
+            alignSelf: "center"
+          }
+        ]}
+      >
         <View style={styles.grabber} />
         <View style={styles.rowBetween}>
           <Text style={styles.title}>Spent on what?</Text>

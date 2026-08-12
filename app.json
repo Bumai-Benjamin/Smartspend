@@ -6,10 +6,32 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "backgroundColor": "#f5ead8",
+    "icon": "./assets/icon.png",
     "android": {
       "package": "com.bumai.smartspend",
-      "adaptiveIcon": { "backgroundColor": "#f5ead8" }
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#c67139"
+      }
     },
-    "plugins": []
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icon.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#f5ead8"
+        }
+      ]
+    ],
+    "extra": {
+      "supabaseUrl": "https://clemqudjzbiyxtdagjav.supabase.co",
+      "supabaseAnonKey": "sb_publishable_eP49JcDhHV-eO8iqyLtT1A_L9FO_3ln",
+      "eas": {
+        "projectId": "fd5b85dc-89f7-4f9f-866c-3a1c7486c10a"
+      }
+    },
+    "owner": "bumais-team"
   }
 }
