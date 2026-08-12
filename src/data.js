@@ -62,6 +62,23 @@ export const SOURCES = [
   { n: "Receipts (beta)", meta: "not set up", dot: "#c0b6a5" }
 ];
 
+export const INCOME = 3200;
+
+export const SAVINGS = { thisMonth: 220, targetRate: 0.15 };
+
+export const DEBT = { balance: 650, limit: 2500, note: "Card ·1274 · min payment made on time" };
+
+// last 3 months of spend per category, for trend comparisons
+export const CAT_HISTORY = {
+  home:   [1050, 1050, 1050],
+  food:   [225, 210, 225],
+  groc:   [270, 255, 258],
+  fun:    [145, 138, 142],
+  subs:   [64, 66, 63],
+  trans:  [68, 72, 70],
+  health: [15, 10, 18]
+};
+
 export const TAKEAWAYS = [
   { kicker: "Habit spotted", text: "Every Friday costs you about $38. That is one whole envelope a month.", bg: "#fff2eb", kc: "#8c491a", tc: "#643312" },
   { kicker: "Quietly good", text: "Groceries are down 18% on July while eating out held flat. Cooking is winning.", bg: "#f0fae1", kc: "#56633f", tc: "#272e1b" },

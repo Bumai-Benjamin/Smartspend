@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, useState, useCallback } from "react";
-import { CATS, BASE_GROUPS } from "../data";
+import { CATS, BASE_GROUPS, INCOME, SAVINGS, DEBT, CAT_HISTORY, GOALS } from "../data";
 
 const SpendContext = createContext(null);
 
@@ -122,6 +122,61 @@ export function SpendProvider({ children }) {
     [budgets]
   );
 
+  const STATUS_WORD = { green: "Good", yellow: "Needs improvement", red: "Low" };
+  const STATUS_SCORE = { green: 92, yellow: 58, red: 28 };
+
+  const health = useMemo(() => {
+    const rawPace = totalSpent / TOTAL_BUDGET;
+    const spendingStatus = rawPace <= 0.85 ? "green" : rawPace <= 1 ? "yellow" : "red";
+
+    const savingsRate = SAVINGS.thisMonth / INCOME;
+    const savingsStatus = savingsRate >= SAVINGS.targetRate ? "green" : savingsRate >= 0.05 ? "yellow" : "red";
+
+    const debtToIncome = DEBT.balance / INCOME;
+    const debtStatus = debtToIncome < 0.3 ? "green" : debtToIncome < 0.5 ? "yellow" : "red";
+
+    const emergencyFund = GOALS.find((g) => g.n === "Emergency fund");
+    const emergencyMonths = emergencyFund ? emergencyFund.saved / TOTAL_BUDGET : 0;
+    const emergencyStatus = emergencyMonths >= 3 ? "green" : emergencyMonths >= 1 ? "yellow" : "red";
+
+    const cashFlow = INCOME - TOTAL_BUDGET;
+    const cashFlowStatus = cashFlow >= 200 ? "green" : cashFlow >= 0 ? "yellow" : "red";
+
+    const breakdown = [
+      { k: "spending", label: "Spending", status: spendingStatus, word: STATUS_WORD[spendingStatus] },
+      { k: "savings", label: "Savings", status: savingsStatus, word: STATUS_WORD[savingsStatus] },
+      { k: "debt", label: "Debt", status: debtStatus, word: STATUS_WORD[debtStatus] },
+      { k: "emergency", label: "Emergency fund", status: emergencyStatus, word: STATUS_WORD[emergencyStatus] },
+      { k: "cashflow", label: "Monthly cash flow", status: cashFlowStatus, word: STATUS_WORD[cashFlowStatus] }
+    ];
+
+    const score = Math.round(
+      breakdown.reduce((a, b) => a + STATUS_SCORE[b.status], 0) / breakdown.length
+    );
+    const label = score >= 80 ? "Great" : score >= 65 ? "Good" : score >= 45 ? "Fair" : "Needs work";
+
+    let biggestProblem = null;
+    let worstPct = 0;
+    Object.keys(CAT_HISTORY).forEach((k) => {
+      const hist = CAT_HISTORY[k];
+      const avg = hist.reduce((a, v) => a + v, 0) / hist.length;
+      if (!avg) return;
+      const spent = spentByCat[k] || 0;
+      const pct = ((spent - avg) / avg) * 100;
+      if (pct > worstPct && pct >= 10) {
+        worstPct = pct;
+        biggestProblem = {
+          cat: k,
+          name: CATS[k].n,
+          pct: Math.round(pct),
+          text: `Your biggest problem this month is ${CATS[k].n.toLowerCase()} spending. You're spending ${Math.round(pct)}% more than your 3-month average.`
+        };
+      }
+    });
+
+    return { score, label, breakdown, biggestProblem };
+  }, [totalSpent, spentByCat]);
+
   const value = {
     cats: CATS,
     budgets,
@@ -142,7 +197,8 @@ export function SpendProvider({ children }) {
     daysInMonth: DAYS_IN_MONTH,
     catRows,
     groups,
-    allocated
+    allocated,
+    health
   };
 
   return <SpendContext.Provider value={value}>{children}</SpendContext.Provider>;

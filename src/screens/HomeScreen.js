@@ -5,9 +5,10 @@ import { colors, fonts, radii } from "../theme";
 import { useSpend, fmt, short } from "../context/SpendContext";
 import { UPCOMING } from "../data";
 import ProgressBar from "../components/ProgressBar";
+import HealthCard from "../components/HealthCard";
 
 export default function HomeScreen({ navigation }) {
-  const { totalSpent, totalBudget, left, pace, heroLine, daysLeft, dayOfMonth, daysInMonth, catRows, addExpense } = useSpend();
+  const { totalSpent, totalBudget, left, pace, heroLine, daysLeft, dayOfMonth, daysInMonth, catRows, addExpense, health } = useSpend();
 
   const quickAdds = [
     { label: "Coffee $5.40", c: "#d67f48", cat: "food", amt: 5.4, n: "Blue Bottle" },
@@ -49,6 +50,8 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.heroDivider} />
           <Text style={styles.heroLine}>{heroLine}</Text>
         </View>
+
+        <HealthCard health={health} />
 
         <View style={styles.section}>
           <Text style={styles.kicker}>One tap, done</Text>

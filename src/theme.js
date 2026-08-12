@@ -22,7 +22,9 @@ export const colors = {
   sageTrack: "#ccdbb2",
   sageFill: "#728157",
   warnBg: "#fff2eb",
-  warnText: "#643312"
+  warnText: "#643312",
+  danger: "#a63a2e",
+  dangerBg: "#fbe4dd"
 };
 
 export const fonts = {
