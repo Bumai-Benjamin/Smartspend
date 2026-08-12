@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "SmartSpend",
+    "slug": "smartspend",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#f5ead8",
+    "android": {
+      "package": "com.bumai.smartspend",
+      "adaptiveIcon": { "backgroundColor": "#f5ead8" }
+    },
+    "plugins": []
+  }
+}
