@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, ScrollView, Pressable, StyleSheet } from "react-native";
+import Slider from "@react-native-community/slider";
 import { Feather } from "@expo/vector-icons";
 import { colors, fonts, radii } from "../theme";
 import { useSpend, fmt, short } from "../context/SpendContext";
@@ -15,7 +16,7 @@ const TABS = [
 
 export default function PlanScreen({ route }) {
   const {
-    catRows, budgets, bumpBudget, allocated, totalBudget,
+    catRows, budgets, setBudgetAmount, allocated, totalBudget,
     subscriptions, addSubscription, deleteSubscription,
     emergencyFund, updateEmergencyFund,
     healthInputs, updateHealthInputs
@@ -58,23 +59,12 @@ export default function PlanScreen({ route }) {
         {tab === "budgets" && (
           <View style={{ paddingHorizontal: 20, gap: 12, marginTop: 18 }}>
             {catRows.map((c) => (
-              <View key={c.k} style={styles.budgetCard}>
-                <View style={styles.rowCenter}>
-                  <View style={[styles.dotSm, { backgroundColor: c.c }]} />
-                  <Text style={[styles.rowLabel, { flex: 1 }]}>{c.n}</Text>
-                  <Pressable onPress={() => bumpBudget(c.k, -10)} style={styles.stepBtn}>
-                    <Text style={styles.stepBtnText}>{"−"}</Text>
-                  </Pressable>
-                  <Text style={styles.budgetVal}>{short(budgets[c.k] || 0)}</Text>
-                  <Pressable onPress={() => bumpBudget(c.k, 10)} style={styles.stepBtn}>
-                    <Text style={styles.stepBtnText}>+</Text>
-                  </Pressable>
-                </View>
-                <View style={{ marginTop: 12 }}>
-                  <ProgressBar pct={c.pct} color={c.c} bg={colors.track} height={8} />
-                </View>
-                <Text style={[styles.budgetNote, c.over && { color: colors.accentDark }]}>{c.note}</Text>
-              </View>
+              <BudgetSliderRow
+                key={c.k}
+                c={c}
+                budget={budgets[c.k] || 0}
+                onCommit={(v) => setBudgetAmount(c.k, v)}
+              />
             ))}
             <View style={styles.allocatedCard}>
               <Text style={styles.allocatedLabel}>Allocated</Text>
@@ -108,6 +98,46 @@ export default function PlanScreen({ route }) {
         )}
       </ScrollView>
     </Screen>
+  );
+}
+
+function BudgetSliderRow({ c, budget, onCommit }) {
+  const [localValue, setLocalValue] = useState(budget);
+  useEffect(() => { setLocalValue(budget); }, [budget]);
+
+  const pct = localValue ? Math.min(c.s / localValue, 1) : 0;
+  const note = !localValue
+    ? "No budget set yet"
+    : c.s > localValue
+    ? `${fmt(c.s - localValue)} over its ${short(localValue)} budget`
+    : localValue - c.s < localValue * 0.15
+    ? `${fmt(localValue - c.s)} left — getting thin`
+    : `${fmt(localValue - c.s)} left of ${short(localValue)}`;
+
+  return (
+    <View style={styles.budgetCard}>
+      <View style={styles.rowCenter}>
+        <View style={[styles.dotSm, { backgroundColor: c.c }]} />
+        <Text style={[styles.rowLabel, { flex: 1 }]}>{c.n}</Text>
+        <Text style={styles.budgetVal}>{short(localValue)}</Text>
+      </View>
+      <Slider
+        style={{ marginTop: 10, height: 32 }}
+        value={budget}
+        minimumValue={0}
+        maximumValue={c.max || 1000}
+        step={5}
+        minimumTrackTintColor={c.c}
+        maximumTrackTintColor={colors.track}
+        thumbTintColor={c.c}
+        onValueChange={setLocalValue}
+        onSlidingComplete={onCommit}
+      />
+      <View style={{ marginTop: 8 }}>
+        <ProgressBar pct={pct} color={c.c} bg={colors.track} height={8} />
+      </View>
+      <Text style={[styles.budgetNote, c.s > localValue && { color: colors.accentDark }]}>{note}</Text>
+    </View>
   );
 }
 
@@ -262,9 +292,7 @@ const styles = StyleSheet.create({
   rowLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
   dotSm: { width: 10, height: 10, borderRadius: radii.pill },
   budgetCard: { backgroundColor: colors.card, borderRadius: radii.md, padding: 16 },
-  stepBtn: { width: 30, height: 30, borderRadius: radii.pill, backgroundColor: colors.cardHover, alignItems: "center", justifyContent: "center" },
-  stepBtnText: { fontFamily: fonts.semibold, fontSize: 16, color: colors.ink },
-  budgetVal: { minWidth: 62, textAlign: "center", fontFamily: fonts.heading, fontSize: 16, color: colors.ink },
+  budgetVal: { minWidth: 62, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink },
   budgetNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
   allocatedCard: { backgroundColor: colors.tint, borderRadius: radii.md, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
   allocatedLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },

@@ -1,0 +1,256 @@
+.tab-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.budget-card, .goal-card, .health-form-card {
+  background: #f9f4ed;
+  border-radius: 22px;
+  padding: 16px;
+}
+
+.budget-slider {
+  width: 100%;
+  height: 22px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.budget-val {
+  min-width: 62px;
+  text-align: right;
+  font-family: 'Caprasimo', cursive;
+  font-size: 16px;
+  color: #201e1d;
+}
+
+.budget-note {
+  font-family: 'Figtree', sans-serif;
+  font-size: 11.5px;
+  color: rgba(32, 30, 29, 0.5);
+  margin: 6px 0 0;
+}
+
+.allocated-card {
+  background: #ebddc5;
+  border-radius: 22px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.allocated-label {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #201e1d;
+}
+
+.allocated-val {
+  font-family: 'Caprasimo', cursive;
+  font-size: 20px;
+  color: #201e1d;
+}
+
+.subs-hero {
+  background: #ebddc5;
+  border-radius: 28px;
+  padding: 20px;
+}
+
+.subs-total {
+  font-family: 'Caprasimo', cursive;
+  font-size: 34px;
+  color: #201e1d;
+  margin: 8px 0 0;
+}
+
+.subs-sub {
+  font-family: 'Figtree', sans-serif;
+  font-size: 12.5px;
+  color: rgba(32, 30, 29, 0.62);
+  margin: 6px 0 0;
+}
+
+.sub-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f9f4ed;
+  border-radius: 22px;
+  padding: 15px;
+}
+
+.sub-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Caprasimo', cursive;
+  font-size: 15px;
+  color: #f9f4ed;
+  flex-shrink: 0;
+}
+
+.per-mo {
+  font-family: 'Figtree', sans-serif;
+  font-size: 10.5px;
+  color: rgba(32, 30, 29, 0.35);
+  margin: 4px 0 0;
+}
+
+.delete-btn {
+  padding: 6px;
+  margin-left: 4px;
+  color: rgba(32, 30, 29, 0.4);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  color: #a63a2e;
+}
+
+.helper-text {
+  font-family: 'Figtree', sans-serif;
+  font-size: 12px;
+  color: rgba(32, 30, 29, 0.5);
+  text-align: center;
+  margin: 4px 0 0;
+}
+
+.add-row-btn {
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px dashed rgba(32, 30, 29, 0.2);
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #8c491a;
+  text-align: center;
+}
+
+.add-card {
+  background: #f9f4ed;
+  border-radius: 22px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-input {
+  background: #f5ead8;
+  border-radius: 14px;
+  border: 1px solid rgba(32, 30, 29, 0.1);
+  padding: 11px 13px;
+  font-family: 'Figtree', sans-serif;
+  font-size: 14px;
+  color: #201e1d;
+  width: 100%;
+}
+
+.btn-primary {
+  padding: 10px;
+  border-radius: 999px;
+  background: #c67139;
+  color: #f9f4ed;
+  font-family: 'Caprasimo', cursive;
+  font-size: 13px;
+}
+
+.btn-secondary {
+  padding: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(32, 30, 29, 0.1);
+  font-family: 'Caprasimo', cursive;
+  font-size: 13px;
+  color: #201e1d;
+}
+
+.goal-card {
+  background: #f0fae1;
+}
+
+.goal-name {
+  font-family: 'Caprasimo', cursive;
+  font-size: 18px;
+  color: #272e1b;
+}
+
+.goal-pct {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #56633f;
+}
+
+.goal-saved {
+  font-family: 'Caprasimo', cursive;
+  font-size: 30px;
+  color: #272e1b;
+}
+
+.goal-target {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #56633f;
+  padding-bottom: 4px;
+}
+
+.fields-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.field-label {
+  flex: 1;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #201e1d;
+}
+
+.field-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #f5ead8;
+  border-radius: 14px;
+  border: 1px solid rgba(32, 30, 29, 0.1);
+  padding: 8px 12px;
+  min-width: 130px;
+}
+
+.field-prefix {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(32, 30, 29, 0.5);
+  margin-right: 4px;
+}
+
+.field-input {
+  flex: 1;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #201e1d;
+  text-align: right;
+  background: none;
+  min-width: 0;
+}

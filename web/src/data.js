@@ -1,5 +1,5 @@
 // Static category metadata. Budgets, spend, goals, subscriptions and health
-// figures all come from Supabase now — see src/context/SpendContext.js.
+// figures all come from Supabase — see src/context/SpendContext.jsx.
 export const CATS = {
   home:   { n: "Home & bills",  c: "#645c50", max: 3000 },
   food:   { n: "Food & drink",  c: "#d67f48", max: 800 },
