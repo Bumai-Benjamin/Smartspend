@@ -1,0 +1,122 @@
+.health-card {
+  background: #f9f4ed;
+  border-radius: 24px;
+  padding: 24px;
+  border: 1px solid rgba(32, 30, 29, 0.1);
+}
+
+.health-kicker {
+  font-family: 'Figtree', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(32, 30, 29, 0.5);
+  margin: 0;
+}
+
+.health-score-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.health-score {
+  font-family: 'Caprasimo', cursive;
+  font-size: 42px;
+  color: #201e1d;
+}
+
+.health-score-max {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: rgba(32, 30, 29, 0.5);
+}
+
+.health-score-label {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #201e1d;
+  margin-left: 4px;
+}
+
+.health-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-top: 20px;
+}
+
+.health-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.health-row-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.health-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.health-row-label {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #201e1d;
+}
+
+.health-row-word {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.health-callout {
+  margin-top: 18px;
+  background: #fff2eb;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.health-callout p {
+  margin: 0;
+  font-family: 'Figtree', sans-serif;
+  font-size: 13px;
+  line-height: 19px;
+  color: #643312;
+}
+
+.health-empty-title {
+  font-family: 'Caprasimo', cursive;
+  font-size: 19px;
+  color: #201e1d;
+  margin: 10px 0 0;
+}
+
+.health-empty-body {
+  font-family: 'Figtree', sans-serif;
+  font-size: 13px;
+  line-height: 19px;
+  color: rgba(32, 30, 29, 0.62);
+  margin: 8px 0 0;
+}
+
+.health-setup-btn {
+  display: inline-block;
+  margin-top: 16px;
+  background: #c67139;
+  color: #f9f4ed;
+  border-radius: 999px;
+  padding: 11px 18px;
+  font-family: 'Caprasimo', cursive;
+  font-size: 13px;
+}

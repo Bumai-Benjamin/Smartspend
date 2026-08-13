@@ -1,0 +1,154 @@
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 8px;
+}
+
+.avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #c67139;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Caprasimo', cursive;
+  font-size: 24px;
+  color: #f9f4ed;
+  flex-shrink: 0;
+}
+
+.you-name {
+  font-family: 'Caprasimo', cursive;
+  font-size: 24px;
+  color: #201e1d;
+  margin: 0;
+}
+
+.you-sub {
+  font-family: 'Figtree', sans-serif;
+  font-size: 12.5px;
+  color: rgba(32, 30, 29, 0.62);
+  margin: 3px 0 0;
+}
+
+.edit-link {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #8c491a;
+}
+
+.income-val {
+  font-family: 'Caprasimo', cursive;
+  font-size: 28px;
+  color: #201e1d;
+  margin: 8px 0 0;
+}
+
+.income-note {
+  font-family: 'Figtree', sans-serif;
+  font-size: 11.5px;
+  color: rgba(32, 30, 29, 0.5);
+  margin: 6px 0 0;
+}
+
+.pref-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 18px;
+}
+
+.pref-divider {
+  border-top: 1px solid rgba(32, 30, 29, 0.1);
+}
+
+.pref-name {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #201e1d;
+  margin: 0;
+}
+
+.pref-footer-note {
+  font-family: 'Figtree', sans-serif;
+  font-size: 11px;
+  line-height: 15px;
+  color: rgba(32, 30, 29, 0.5);
+  padding: 4px 18px 18px;
+  margin: 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-track {
+  position: absolute;
+  inset: 0;
+  background: #dcd3c4;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.switch-track::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: #f9f4ed;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.switch input:checked + .switch-track {
+  background: #c67139;
+}
+
+.switch input:checked + .switch-track::before {
+  transform: translateX(18px);
+}
+
+.you-footer {
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  align-items: flex-start;
+}
+
+.footer-text {
+  font-family: 'Figtree', sans-serif;
+  font-size: 12px;
+  color: rgba(32, 30, 29, 0.5);
+  margin: 0;
+}
+
+.export-link {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #8c491a;
+}
+
+.signout-link {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #a63a2e;
+}

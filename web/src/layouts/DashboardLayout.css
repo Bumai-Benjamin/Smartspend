@@ -1,0 +1,146 @@
+.dash-shell {
+  min-height: 100vh;
+  background: #f5ead8;
+  display: flex;
+}
+
+.dash-sidebar {
+  display: none;
+}
+
+.dash-main {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 90px;
+}
+
+@media (min-width: 900px) {
+  .dash-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+  }
+
+  .dash-sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 28px 18px;
+    border-right: 1px solid rgba(32, 30, 29, 0.08);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+
+  .dash-main {
+    padding-bottom: 40px;
+    max-width: 720px;
+  }
+
+  .dash-bottom-nav, .dash-fab {
+    display: none !important;
+  }
+}
+
+.dash-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  margin-bottom: 30px;
+}
+
+.dash-sidebar-logo img {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+.dash-sidebar-logo span {
+  font-family: 'Caprasimo', cursive;
+  font-size: 18px;
+  color: #201e1d;
+}
+
+.dash-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.dash-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(32, 30, 29, 0.62);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.dash-nav-link:hover {
+  background: #eee7db;
+}
+
+.dash-nav-link.active {
+  background: #f9f4ed;
+  color: #201e1d;
+}
+
+.dash-sidebar-add {
+  height: 46px;
+  border-radius: 999px;
+  background: #c67139;
+  color: #f9f4ed;
+  font-family: 'Caprasimo', cursive;
+  font-size: 14px;
+}
+
+.dash-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: #f9f4ed;
+  border-top: 1px solid rgba(32, 30, 29, 0.1);
+  padding: 8px 6px calc(env(safe-area-inset-bottom, 0px) + 8px);
+  z-index: 40;
+}
+
+.dash-bottom-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 0;
+  color: rgba(32, 30, 29, 0.45);
+}
+
+.dash-bottom-link span {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+}
+
+.dash-bottom-link.active {
+  color: #c67139;
+}
+
+.dash-fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #c67139;
+  color: #f9f4ed;
+  font-size: 26px;
+  line-height: 1;
+  box-shadow: 0 10px 24px rgba(140, 73, 26, 0.35);
+  z-index: 40;
+}
