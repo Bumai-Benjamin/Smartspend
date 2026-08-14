@@ -197,8 +197,8 @@ function SubsTab({ subscriptions, subsTotal, addSubscription, deleteSubscription
 }
 
 function NumberField({ label, value, onCommit, prefix = "$" }) {
-  const [text, setText] = useState(value != null ? String(value) : "");
-  useEffect(() => { setText(value != null ? String(value) : ""); }, [value]);
+  const [text, setText] = useState(value ? String(value) : "");
+  useEffect(() => { setText(value ? String(value) : ""); }, [value]);
   return (
     <div className="field-row">
       <span className="field-label">{label}</span>
