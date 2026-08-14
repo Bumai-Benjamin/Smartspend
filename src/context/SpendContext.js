@@ -81,7 +81,7 @@ export function SpendProvider({ children }) {
     setLoading(true);
     (async () => {
       const [profileRes, budgetsRes, txRes, goalsRes, subsRes, healthRes] = await Promise.all([
-        supabase.from("profiles").select("display_name, prefs, created_at").eq("id", user.id).single(),
+        supabase.from("profiles").select("display_name, avatar_url, prefs, created_at").eq("id", user.id).single(),
         supabase.from("budgets").select("category_key, amount").eq("user_id", user.id),
         supabase
           .from("transactions")
@@ -95,7 +95,7 @@ export function SpendProvider({ children }) {
       ]);
       if (cancelled) return;
 
-      setProfile(profileRes.data || { display_name: "You", prefs: DEFAULT_PREFS });
+      setProfile(profileRes.data || { display_name: "You", avatar_url: null, prefs: DEFAULT_PREFS });
 
       const b = {};
       (budgetsRes.data || []).forEach((row) => { b[row.category_key] = Number(row.amount); });
@@ -155,6 +155,26 @@ export function SpendProvider({ children }) {
       return { ...(prev || {}), prefs: nextPrefs };
     });
   }, [user]);
+
+  const updateProfile = useCallback((patch) => {
+    if (!user) return;
+    setProfile((prev) => ({ ...(prev || {}), ...patch }));
+    supabase.from("profiles").update(patch).eq("id", user.id).then(({ error }) => { if (error) console.warn(error.message); });
+  }, [user]);
+
+  const uploadAvatar = useCallback(async (uri) => {
+    if (!user || !uri) return;
+    const ext = (uri.split(".").pop() || "jpg").split("?")[0].toLowerCase();
+    const path = `${user.id}/avatar.${ext}`;
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(path, blob, { contentType: blob.type || `image/${ext === "jpg" ? "jpeg" : ext}`, upsert: true });
+    if (uploadError) { console.warn(uploadError.message); return; }
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    updateProfile({ avatar_url: `${data.publicUrl}?t=${Date.now()}` });
+  }, [user, updateProfile]);
 
   const updateHealthInputs = useCallback((patch) => {
     if (!user) return;
@@ -389,6 +409,9 @@ export function SpendProvider({ children }) {
   const value = {
     loading,
     displayName: profile?.display_name || "You",
+    avatarUrl: profile?.avatar_url || null,
+    updateProfile,
+    uploadAvatar,
     memberSince: profile?.created_at ? new Date(profile.created_at) : null,
     cats: CATS,
     budgets,

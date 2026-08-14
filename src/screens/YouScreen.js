@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-import { View, Text, ScrollView, Pressable, Switch, Share, StyleSheet } from "react-native";
+import React, { useMemo, useState } from "react";
+import { View, Text, TextInput, Image, ScrollView, Pressable, Switch, Share, StyleSheet, ActivityIndicator } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { fonts, radii } from "../theme";
 import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt } from "../context/SpendContext";
@@ -21,8 +22,13 @@ function monthsSince(date) {
 export default function YouScreen({ navigation }) {
   const { colors, theme, setTheme } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
-  const { prefs, togglePref, displayName, memberSince, healthInputs, transactions, cats } = useSpend();
+  const { prefs, togglePref, displayName, avatarUrl, updateProfile, uploadAvatar, memberSince, healthInputs, transactions, cats } = useSpend();
   const { user, signOut } = useAuth();
+
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState(displayName);
+  const [avatarBusy, setAvatarBusy] = useState(false);
+  const [avatarError, setAvatarError] = useState("");
 
   const prefRows = [
     ["nudges", "Gentle nudges", "A poke when a category is nearly empty"],
@@ -33,6 +39,36 @@ export default function YouScreen({ navigation }) {
 
   const months = monthsSince(memberSince);
   const initial = (displayName || "?").charAt(0).toUpperCase();
+
+  function startEditName() {
+    setNameDraft(displayName);
+    setEditingName(true);
+  }
+
+  function commitName() {
+    const next = nameDraft.trim();
+    setEditingName(false);
+    if (next && next !== displayName) updateProfile({ display_name: next });
+  }
+
+  async function pickAvatar() {
+    setAvatarError("");
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!perm.granted) { setAvatarError("Photo library access is needed to set a profile picture."); return; }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8
+    });
+    if (result.canceled || !result.assets?.[0]?.uri) return;
+    setAvatarBusy(true);
+    try {
+      await uploadAvatar(result.assets[0].uri);
+    } finally {
+      setAvatarBusy(false);
+    }
+  }
 
   function exportCsv() {
     const rows = [["Date", "Category", "Label", "Amount"]];
@@ -47,12 +83,37 @@ export default function YouScreen({ navigation }) {
     <Screen>
       <ScrollView contentContainerStyle={{ paddingBottom: 28 }}>
         <View style={styles.profileRow}>
-          <View style={styles.avatar}><Text style={styles.avatarText}>{initial}</Text></View>
-          <View>
-            <Text style={styles.name}>{displayName}</Text>
+          <Pressable onPress={pickAvatar} disabled={avatarBusy} style={styles.avatar}>
+            {avatarUrl ? (
+              <Image source={{ uri: avatarUrl }} style={styles.avatarImg} />
+            ) : (
+              <Text style={styles.avatarText}>{initial}</Text>
+            )}
+            <View style={styles.avatarEditBadge}>
+              {avatarBusy ? <ActivityIndicator size="small" color={colors.ink} /> : <Text style={styles.avatarEditBadgeText}>✎</Text>}
+            </View>
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            {editingName ? (
+              <TextInput
+                style={styles.nameInput}
+                value={nameDraft}
+                onChangeText={setNameDraft}
+                onBlur={commitName}
+                onSubmitEditing={commitName}
+                autoFocus
+                maxLength={40}
+              />
+            ) : (
+              <Pressable onPress={startEditName} style={styles.rowCenter}>
+                <Text style={styles.name}>{displayName}</Text>
+                <Text style={styles.nameEditIcon}>✎</Text>
+              </Pressable>
+            )}
             <Text style={styles.sub}>
               {user?.email}{months > 0 ? ` · ${months} month${months === 1 ? "" : "s"} on SmartSpend` : ""}
             </Text>
+            {!!avatarError && <Text style={styles.avatarErrorText}>{avatarError}</Text>}
           </View>
         </View>
 
@@ -112,9 +173,16 @@ export default function YouScreen({ navigation }) {
 function makeStyles(colors) {
   return StyleSheet.create({
     profileRow: { flexDirection: "row", alignItems: "center", gap: 14, paddingHorizontal: 20, paddingTop: 8 },
-    avatar: { width: 62, height: 62, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center" },
+    avatar: { width: 62, height: 62, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center", overflow: "visible" },
+    avatarImg: { width: 62, height: 62, borderRadius: radii.pill },
     avatarText: { fontFamily: fonts.heading, fontSize: 24, color: colors.onAccent },
+    avatarEditBadge: { position: "absolute", right: -2, bottom: -2, width: 22, height: 22, borderRadius: radii.pill, backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.bg, alignItems: "center", justifyContent: "center" },
+    avatarEditBadgeText: { fontSize: 11, color: colors.ink },
+    avatarErrorText: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.danger, marginTop: 4 },
+    rowCenter: { flexDirection: "row", alignItems: "center", gap: 7 },
     name: { fontFamily: fonts.heading, fontSize: 24, color: colors.ink },
+    nameEditIcon: { fontSize: 12, color: colors.inkFainter },
+    nameInput: { fontFamily: fonts.heading, fontSize: 24, color: colors.ink, backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.accent, borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2 },
     sub: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.inkSoft, marginTop: 3 },
     card: { marginHorizontal: 20, marginTop: 20, backgroundColor: colors.card, borderRadius: radii.md, padding: 18 },
     kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },

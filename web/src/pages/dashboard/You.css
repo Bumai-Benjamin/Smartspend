@@ -17,6 +17,62 @@
   font-size: 24px;
   color: var(--on-accent);
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar-btn {
+  position: relative;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.avatar-btn:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.avatar-file-input {
+  display: none;
+}
+
+.avatar-error {
+  font-family: 'Figtree', sans-serif;
+  font-size: 11.5px;
+  color: var(--danger);
+  margin: 4px 0 0;
+}
+
+.you-name-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .you-name {
@@ -24,6 +80,23 @@
   font-size: 24px;
   color: var(--ink);
   margin: 0;
+}
+
+.you-name-edit {
+  font-size: 12px;
+  color: rgba(var(--ink-rgb), 0.4);
+}
+
+.you-name-input {
+  font-family: 'Caprasimo', cursive;
+  font-size: 24px;
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  padding: 2px 8px;
+  width: 220px;
+  max-width: 60vw;
 }
 
 .you-sub {

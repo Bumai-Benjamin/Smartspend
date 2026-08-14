@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSpend, fmt } from "../../context/SpendContext";
 import { useAuth } from "../../context/AuthContext";
@@ -7,6 +7,7 @@ import "./dashboard.css";
 import "./You.css";
 
 const THEME_OPTIONS = [["system", "System"], ["light", "Light"], ["dark", "Dark"]];
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
 
 function monthsSince(date) {
   if (!date) return 0;
@@ -15,10 +16,16 @@ function monthsSince(date) {
 }
 
 export default function You() {
-  const { prefs, togglePref, displayName, memberSince, healthInputs, transactions, cats } = useSpend();
+  const { prefs, togglePref, displayName, avatarUrl, updateProfile, uploadAvatar, memberSince, healthInputs, transactions, cats } = useSpend();
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState(displayName);
+  const [avatarBusy, setAvatarBusy] = useState(false);
+  const [avatarError, setAvatarError] = useState("");
 
   const prefRows = [
     ["nudges", "Gentle nudges", "A poke when a category is nearly empty"],
@@ -29,6 +36,32 @@ export default function You() {
 
   const months = monthsSince(memberSince);
   const initial = (displayName || "?").charAt(0).toUpperCase();
+
+  function startEditName() {
+    setNameDraft(displayName);
+    setEditingName(true);
+  }
+
+  function commitName() {
+    const next = nameDraft.trim();
+    setEditingName(false);
+    if (next && next !== displayName) updateProfile({ display_name: next });
+  }
+
+  async function handleAvatarChange(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setAvatarError("");
+    if (!file.type.startsWith("image/")) { setAvatarError("Pick an image file."); return; }
+    if (file.size > MAX_AVATAR_BYTES) { setAvatarError("Image must be under 5MB."); return; }
+    setAvatarBusy(true);
+    try {
+      await uploadAvatar(file);
+    } finally {
+      setAvatarBusy(false);
+    }
+  }
 
   function exportCsv() {
     const rows = [["Date", "Category", "Label", "Amount"]];
@@ -53,10 +86,45 @@ export default function You() {
   return (
     <div className="page">
       <div className="profile-row">
-        <div className="avatar">{initial}</div>
+        <button
+          type="button"
+          className="avatar avatar-btn"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={avatarBusy}
+          aria-label="Change profile picture"
+        >
+          {avatarUrl ? <img src={avatarUrl} alt="" className="avatar-img" /> : initial}
+          <span className="avatar-edit-badge">{avatarBusy ? "…" : "✎"}</span>
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="avatar-file-input"
+          onChange={handleAvatarChange}
+        />
         <div>
-          <p className="you-name">{displayName}</p>
+          {editingName ? (
+            <input
+              className="you-name-input"
+              value={nameDraft}
+              onChange={(e) => setNameDraft(e.target.value)}
+              onBlur={commitName}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.currentTarget.blur();
+                if (e.key === "Escape") setEditingName(false);
+              }}
+              autoFocus
+              maxLength={40}
+            />
+          ) : (
+            <button type="button" className="you-name-btn" onClick={startEditName}>
+              <span className="you-name">{displayName}</span>
+              <span className="you-name-edit">✎</span>
+            </button>
+          )}
           <p className="you-sub">{user?.email}{months > 0 ? ` · ${months} month${months === 1 ? "" : "s"} on SmartSpend` : ""}</p>
+          {avatarError && <p className="avatar-error">{avatarError}</p>}
         </div>
       </div>
 
