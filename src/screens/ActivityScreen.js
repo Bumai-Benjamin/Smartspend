@@ -1,11 +1,14 @@
 import React, { useState, useMemo } from "react";
 import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
-import { colors, fonts, radii } from "../theme";
+import { fonts, radii } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt } from "../context/SpendContext";
 import { CATS } from "../data";
 import Screen from "../components/Screen";
 
 export default function ActivityScreen() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { groups, totalSpent } = useSpend();
   const [filter, setFilter] = useState("all");
 
@@ -77,25 +80,27 @@ export default function ActivityScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  header: { paddingHorizontal: 20, paddingTop: 8 },
-  h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
-  sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
-  emptyText: { fontFamily: fonts.regular, fontSize: 13.5, color: colors.inkFaint, textAlign: "center", marginTop: 20 },
-  filterRow: { marginTop: 18, flexGrow: 0 },
-  filterChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.pill, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.hairline },
-  filterChipOn: { backgroundColor: colors.ink, borderColor: colors.ink },
-  filterLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.ink },
-  filterLabelOn: { color: colors.bg },
-  groupHead: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
-  groupLabel: { fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 1.2, color: colors.inkFaint },
-  groupTotal: { fontFamily: fonts.semibold, fontSize: 11, color: colors.inkFainter },
-  card: { backgroundColor: colors.card, borderRadius: radii.md, overflow: "hidden" },
-  txRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 13, paddingHorizontal: 16 },
-  txDivider: { borderTopWidth: 1, borderTopColor: colors.hairline },
-  avatar: { width: 36, height: 36, borderRadius: radii.pill, alignItems: "center", justifyContent: "center" },
-  avatarText: { fontFamily: fonts.heading, fontSize: 14, color: colors.card },
-  txName: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
-  txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
-  txAmt: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    header: { paddingHorizontal: 20, paddingTop: 8 },
+    h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
+    sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
+    emptyText: { fontFamily: fonts.regular, fontSize: 13.5, color: colors.inkFaint, textAlign: "center", marginTop: 20 },
+    filterRow: { marginTop: 18, flexGrow: 0 },
+    filterChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.pill, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.hairline },
+    filterChipOn: { backgroundColor: colors.ink, borderColor: colors.ink },
+    filterLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.ink },
+    filterLabelOn: { color: colors.bg },
+    groupHead: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
+    groupLabel: { fontFamily: fonts.semibold, fontSize: 11, letterSpacing: 1.2, color: colors.inkFaint },
+    groupTotal: { fontFamily: fonts.semibold, fontSize: 11, color: colors.inkFainter },
+    card: { backgroundColor: colors.card, borderRadius: radii.md, overflow: "hidden" },
+    txRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 13, paddingHorizontal: 16 },
+    txDivider: { borderTopWidth: 1, borderTopColor: colors.hairline },
+    avatar: { width: 36, height: 36, borderRadius: radii.pill, alignItems: "center", justifyContent: "center" },
+    avatarText: { fontFamily: fonts.heading, fontSize: 14, color: colors.onAccent },
+    txName: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
+    txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
+    txAmt: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink }
+  });
+}

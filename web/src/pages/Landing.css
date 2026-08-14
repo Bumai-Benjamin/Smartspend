@@ -1,6 +1,6 @@
 .landing {
   min-height: 100vh;
-  background: #f5ead8;
+  background: var(--bg);
   overflow-x: hidden;
 }
 
@@ -8,7 +8,7 @@
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: #f5ead8;
+  background: var(--bg);
 }
 
 .landing-nav {
@@ -35,7 +35,7 @@
 .landing-logo span {
   font-family: 'Caprasimo', cursive;
   font-size: 19px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .landing-nav-links {
@@ -48,22 +48,22 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 13.5px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .nav-cta {
   font-family: 'Figtree', sans-serif;
   font-weight: 700;
   font-size: 13.5px;
-  background: #c67139;
-  color: #f9f4ed;
+  background: var(--accent);
+  color: var(--on-accent);
   padding: 10px 18px;
   border-radius: 999px;
   transition: background 0.15s ease;
 }
 
 .nav-cta:hover {
-  background: #b2622d;
+  background: var(--accent-press);
 }
 
 .landing-hero {
@@ -79,7 +79,7 @@
   font-size: 12px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #8c491a;
+  color: var(--accent-dark);
   margin: 0 0 18px;
 }
 
@@ -87,7 +87,7 @@
   font-family: 'Caprasimo', cursive;
   font-size: clamp(34px, 6vw, 58px);
   line-height: 1.1;
-  color: #201e1d;
+  color: var(--ink);
   margin: 0 0 20px;
 }
 
@@ -95,7 +95,7 @@
   font-family: 'Figtree', sans-serif;
   font-size: 17px;
   line-height: 1.6;
-  color: rgba(32, 30, 29, 0.65);
+  color: rgba(var(--ink-rgb), 0.65);
   max-width: 540px;
   margin: 0 auto 32px;
 }
@@ -110,8 +110,8 @@
 .hero-primary-btn {
   font-family: 'Caprasimo', cursive;
   font-size: 15px;
-  background: #c67139;
-  color: #f9f4ed;
+  background: var(--accent);
+  color: var(--on-accent);
   padding: 15px 28px;
   border-radius: 999px;
   transition: background 0.15s ease, transform 0.1s ease;
@@ -119,7 +119,7 @@
 }
 
 .hero-primary-btn:hover {
-  background: #b2622d;
+  background: var(--accent-press);
 }
 
 .hero-primary-btn:active {
@@ -130,16 +130,16 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 14px;
-  color: #201e1d;
+  color: var(--ink);
   padding: 15px 20px;
   border-radius: 999px;
-  border: 1px solid rgba(32, 30, 29, 0.15);
+  border: 1px solid rgba(var(--ink-rgb), 0.15);
   display: inline-block;
   transition: background 0.15s ease;
 }
 
 .hero-secondary-btn:hover {
-  background: #eee7db;
+  background: var(--card-hover);
 }
 
 .landing-mock-wrap {
@@ -155,10 +155,10 @@
 }
 
 .mock-card {
-  background: #f9f4ed;
+  background: var(--card);
   border-radius: 28px;
   padding: 26px;
-  border: 1px solid rgba(32, 30, 29, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   box-shadow: 0 30px 70px rgba(100, 51, 18, 0.14);
   transform: rotateX(4deg) rotateY(-6deg);
   transition: transform 0.4s ease;
@@ -173,7 +173,7 @@
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin: 0;
 }
 
@@ -187,21 +187,21 @@
 .mock-score {
   font-family: 'Caprasimo', cursive;
   font-size: 42px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .mock-score-max {
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 15px;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
 }
 
 .mock-score-label {
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 15px;
-  color: #201e1d;
+  color: var(--ink);
   margin-left: 4px;
 }
 
@@ -218,7 +218,7 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 13.5px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .mock-word {
@@ -235,13 +235,13 @@
 
 .mock-callout {
   margin-top: 18px;
-  background: #fff2eb;
+  background: var(--warn-bg);
   border-radius: 16px;
   padding: 14px;
   font-family: 'Figtree', sans-serif;
   font-size: 12.5px;
   line-height: 18px;
-  color: #643312;
+  color: var(--warn-text);
 }
 
 .landing-features {
@@ -254,10 +254,10 @@
 }
 
 .feature-card {
-  background: #f9f4ed;
+  background: var(--card);
   border-radius: 24px;
   padding: 26px;
-  border: 1px solid rgba(32, 30, 29, 0.08);
+  border: 1px solid rgba(var(--ink-rgb), 0.08);
 }
 
 .feature-dot {
@@ -270,7 +270,7 @@
 .feature-card h3 {
   font-family: 'Caprasimo', cursive;
   font-size: 17px;
-  color: #201e1d;
+  color: var(--ink);
   margin: 0 0 10px;
 }
 
@@ -278,12 +278,12 @@
   font-family: 'Figtree', sans-serif;
   font-size: 13.5px;
   line-height: 20px;
-  color: rgba(32, 30, 29, 0.62);
+  color: rgba(var(--ink-rgb), 0.62);
   margin: 0;
 }
 
 .landing-cta-band {
-  background: #ebddc5;
+  background: var(--tint);
   padding: 70px 24px;
   text-align: center;
 }
@@ -291,14 +291,14 @@
 .landing-cta-band h2 {
   font-family: 'Caprasimo', cursive;
   font-size: clamp(22px, 4vw, 32px);
-  color: #201e1d;
+  color: var(--ink);
   margin: 0 0 12px;
 }
 
 .landing-cta-band p {
   font-family: 'Figtree', sans-serif;
   font-size: 15px;
-  color: rgba(32, 30, 29, 0.65);
+  color: rgba(var(--ink-rgb), 0.65);
   margin: 0 0 26px;
 }
 
@@ -313,7 +313,7 @@
   gap: 12px;
   font-family: 'Figtree', sans-serif;
   font-size: 12.5px;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
 }
 
 .landing-footer-links {
@@ -322,6 +322,6 @@
 }
 
 .landing-footer-links a {
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   font-weight: 600;
 }

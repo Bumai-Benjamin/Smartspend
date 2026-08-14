@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { colors, fonts, radii } from "../theme";
+import { fonts, radii } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt, short } from "../context/SpendContext";
 import ProgressBar from "../components/ProgressBar";
 import HealthCard from "../components/HealthCard";
@@ -10,6 +11,8 @@ import Screen from "../components/Screen";
 const MONTH_YEAR = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 export default function HomeScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const {
     totalSpent, totalBudget, left, pace, heroLine, daysLeft, dayOfMonth, daysInMonth,
     catRows, addExpense, health, upcoming, upcomingTotal, displayName
@@ -33,7 +36,7 @@ export default function HomeScreen({ navigation }) {
             onPress={() => navigation.navigate("AddExpense")}
             style={({ pressed }) => [styles.addBtn, pressed && { backgroundColor: colors.accentPress }]}
           >
-            <Feather name="plus" size={22} color={colors.card} />
+            <Feather name="plus" size={22} color={colors.onAccent} />
           </Pressable>
         </View>
 
@@ -90,7 +93,7 @@ export default function HomeScreen({ navigation }) {
                   <Text style={styles.rowLabel}>{fmt(c.s)}</Text>
                 </View>
                 <View style={{ marginTop: 6 }}>
-                  <ProgressBar pct={c.pct} color={c.c} bg="#e3d8c2" height={9} />
+                  <ProgressBar pct={c.pct} color={c.c} bg={colors.track} height={9} />
                 </View>
                 <Text style={styles.rowNote}>{c.note}</Text>
               </Pressable>
@@ -112,7 +115,7 @@ export default function HomeScreen({ navigation }) {
                   <View style={styles.dayBadge}>
                     <Text style={styles.dayBadgeText}>{u.day}</Text>
                   </View>
-                  <Text style={[styles.rowLabel, { flex: 1, color: "#272e1b" }]}>{u.n}</Text>
+                  <Text style={[styles.rowLabel, { flex: 1, color: colors.sageDark }]}>{u.n}</Text>
                   <Text style={styles.upcomingAmt}>{fmt(u.amt)}</Text>
                 </View>
               ))}
@@ -124,34 +127,36 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 8 },
-  kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
-  h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink, marginTop: 5 },
-  h2: { fontFamily: fonts.heading, fontSize: 19, color: colors.ink },
-  link: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.accentDark },
-  addBtn: { width: 46, height: 46, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center" },
-  hero: { margin: 20, marginTop: 22, backgroundColor: colors.tint, borderRadius: radii.lg, padding: 22 },
-  heroNum: { fontFamily: fonts.heading, fontSize: 46, letterSpacing: -1, color: colors.ink },
-  heroSub: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint, paddingBottom: 6 },
-  rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
-  metaBold: { fontFamily: fonts.semibold, fontSize: 11, color: colors.inkFaint },
-  heroDivider: { height: 1, backgroundColor: colors.hairline, marginTop: 16, marginBottom: 14 },
-  heroLine: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.ink },
-  section: { paddingHorizontal: 20, marginTop: 6 },
-  chipsRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 10 },
-  pill: { flexDirection: "row", alignItems: "center", gap: 7, paddingVertical: 9, paddingLeft: 11, paddingRight: 14, borderRadius: radii.pill, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.hairline },
-  pillLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },
-  dot: { width: 9, height: 9, borderRadius: radii.pill },
-  dotSm: { width: 10, height: 10, borderRadius: radii.pill, marginRight: 8 },
-  rowCenter: { flexDirection: "row", alignItems: "center" },
-  rowLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
-  rowNote: { fontFamily: fonts.regular, fontSize: 11, color: colors.inkFaint, marginTop: 5 },
-  upcoming: { marginHorizontal: 20, marginTop: 20, marginBottom: 8, backgroundColor: colors.sageBg, borderRadius: radii.md, padding: 18 },
-  upcomingTitle: { fontFamily: fonts.heading, fontSize: 16, color: colors.sageDark },
-  upcomingMeta: { fontFamily: fonts.semibold, fontSize: 11, color: colors.sage },
-  upcomingEmpty: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.sage, marginTop: 10, lineHeight: 18 },
-  dayBadge: { width: 34, height: 34, borderRadius: radii.pill, backgroundColor: "#e1eecc", alignItems: "center", justifyContent: "center", marginRight: 11 },
-  dayBadgeText: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sageDark },
-  upcomingAmt: { fontFamily: fonts.semibold, fontSize: 13, color: colors.sageDark }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 8 },
+    kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
+    h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink, marginTop: 5 },
+    h2: { fontFamily: fonts.heading, fontSize: 19, color: colors.ink },
+    link: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.accentDark },
+    addBtn: { width: 46, height: 46, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center" },
+    hero: { margin: 20, marginTop: 22, backgroundColor: colors.tint, borderRadius: radii.lg, padding: 22 },
+    heroNum: { fontFamily: fonts.heading, fontSize: 46, letterSpacing: -1, color: colors.ink },
+    heroSub: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint, paddingBottom: 6 },
+    rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+    metaBold: { fontFamily: fonts.semibold, fontSize: 11, color: colors.inkFaint },
+    heroDivider: { height: 1, backgroundColor: colors.hairline, marginTop: 16, marginBottom: 14 },
+    heroLine: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.ink },
+    section: { paddingHorizontal: 20, marginTop: 6 },
+    chipsRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 10 },
+    pill: { flexDirection: "row", alignItems: "center", gap: 7, paddingVertical: 9, paddingLeft: 11, paddingRight: 14, borderRadius: radii.pill, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.hairline },
+    pillLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },
+    dot: { width: 9, height: 9, borderRadius: radii.pill },
+    dotSm: { width: 10, height: 10, borderRadius: radii.pill, marginRight: 8 },
+    rowCenter: { flexDirection: "row", alignItems: "center" },
+    rowLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
+    rowNote: { fontFamily: fonts.regular, fontSize: 11, color: colors.inkFaint, marginTop: 5 },
+    upcoming: { marginHorizontal: 20, marginTop: 20, marginBottom: 8, backgroundColor: colors.sageBg, borderRadius: radii.md, padding: 18 },
+    upcomingTitle: { fontFamily: fonts.heading, fontSize: 16, color: colors.sageDark },
+    upcomingMeta: { fontFamily: fonts.semibold, fontSize: 11, color: colors.sage },
+    upcomingEmpty: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.sage, marginTop: 10, lineHeight: 18 },
+    dayBadge: { width: 34, height: 34, borderRadius: radii.pill, backgroundColor: colors.sageTrack, alignItems: "center", justifyContent: "center", marginRight: 11 },
+    dayBadgeText: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sageDark },
+    upcomingAmt: { fontFamily: fonts.semibold, fontSize: 13, color: colors.sageDark }
+  });
+}

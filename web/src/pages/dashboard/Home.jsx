@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSpend, fmt, short } from "../../context/SpendContext";
 import ProgressBar from "../../components/ProgressBar";
 import HealthCard from "../../components/HealthCard";
@@ -8,7 +8,6 @@ import "./dashboard.css";
 const MONTH_YEAR = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 export default function Home() {
-  const { openAdd } = useOutletContext();
   const {
     totalSpent, totalBudget, left, pace, heroLine, daysLeft, dayOfMonth, daysInMonth,
     catRows, addExpense, health, upcoming, upcomingTotal, displayName
@@ -23,11 +22,8 @@ export default function Home() {
   return (
     <div className="page">
       <div className="page-header">
-        <div>
-          <p className="kicker">{MONTH_YEAR}</p>
-          <h1 className="h1">Hey {displayName}</h1>
-        </div>
-        <button className="add-btn" onClick={openAdd}>+</button>
+        <p className="kicker">{MONTH_YEAR}</p>
+        <h1 className="h1">Hey {displayName}</h1>
       </div>
 
       <div className="hero-card">
@@ -77,7 +73,7 @@ export default function Home() {
                 <span className="row-label">{fmt(c.s)}</span>
               </div>
               <div style={{ marginTop: 6 }}>
-                <ProgressBar pct={c.pct} color={c.c} bg="#e3d8c2" height={9} />
+                <ProgressBar pct={c.pct} color={c.c} bg="var(--track)" height={9} />
               </div>
               <p className="row-note">{c.note}</p>
             </Link>
@@ -97,7 +93,7 @@ export default function Home() {
             {upcoming.map((u) => (
               <div key={u.n} className="row-center">
                 <div className="day-badge">{u.day}</div>
-                <span className="row-label" style={{ flex: 1, color: "#272e1b" }}>{u.n}</span>
+                <span className="row-label" style={{ flex: 1, color: "var(--sage-dark)" }}>{u.n}</span>
                 <span className="upcoming-amt">{fmt(u.amt)}</span>
               </div>
             ))}

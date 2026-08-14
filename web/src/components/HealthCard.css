@@ -1,8 +1,8 @@
 .health-card {
-  background: #f9f4ed;
+  background: var(--card);
   border-radius: 24px;
   padding: 24px;
-  border: 1px solid rgba(32, 30, 29, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
 }
 
 .health-kicker {
@@ -10,7 +10,7 @@
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin: 0;
 }
 
@@ -24,21 +24,21 @@
 .health-score {
   font-family: 'Caprasimo', cursive;
   font-size: 42px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .health-score-max {
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 15px;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
 }
 
 .health-score-label {
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 15px;
-  color: #201e1d;
+  color: var(--ink);
   margin-left: 4px;
 }
 
@@ -71,7 +71,7 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 14px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .health-row-word {
@@ -82,7 +82,7 @@
 
 .health-callout {
   margin-top: 18px;
-  background: #fff2eb;
+  background: var(--warn-bg);
   border-radius: 16px;
   padding: 14px;
 }
@@ -92,13 +92,13 @@
   font-family: 'Figtree', sans-serif;
   font-size: 13px;
   line-height: 19px;
-  color: #643312;
+  color: var(--warn-text);
 }
 
 .health-empty-title {
   font-family: 'Caprasimo', cursive;
   font-size: 19px;
-  color: #201e1d;
+  color: var(--ink);
   margin: 10px 0 0;
 }
 
@@ -106,15 +106,15 @@
   font-family: 'Figtree', sans-serif;
   font-size: 13px;
   line-height: 19px;
-  color: rgba(32, 30, 29, 0.62);
+  color: rgba(var(--ink-rgb), 0.62);
   margin: 8px 0 0;
 }
 
 .health-setup-btn {
   display: inline-block;
   margin-top: 16px;
-  background: #c67139;
-  color: #f9f4ed;
+  background: var(--accent);
+  color: var(--on-accent);
   border-radius: 999px;
   padding: 11px 18px;
   font-family: 'Caprasimo', cursive;

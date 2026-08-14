@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { useSpend } from "../context/SpendContext";
 
@@ -30,6 +30,7 @@ const ICONS = {
 };
 
 function Tabs() {
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const tabBarBottomPad = Math.max(insets.bottom, 12);
 
@@ -38,7 +39,7 @@ function Tabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: "rgba(32,30,29,0.45)",
+        tabBarInactiveTintColor: colors.inkFaint,
         tabBarStyle: {
           backgroundColor: colors.card,
           borderTopColor: colors.hairline,
@@ -62,6 +63,7 @@ function Tabs() {
 }
 
 export default function RootNavigator() {
+  const { colors } = useTheme();
   const { session, loading: authLoading } = useAuth();
   const { loading: spendLoading } = useSpend();
   const loading = authLoading || (!!session && spendLoading);

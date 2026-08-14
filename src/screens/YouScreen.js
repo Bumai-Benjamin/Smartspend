@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, ScrollView, Pressable, Switch, Share, StyleSheet } from "react-native";
-import { colors, fonts, radii } from "../theme";
+import { fonts, radii } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt } from "../context/SpendContext";
 import { useAuth } from "../context/AuthContext";
 import Screen from "../components/Screen";
+
+const THEME_OPTIONS = [
+  ["system", "System"],
+  ["light", "Light"],
+  ["dark", "Dark"]
+];
 
 function monthsSince(date) {
   if (!date) return 0;
@@ -12,6 +19,8 @@ function monthsSince(date) {
 }
 
 export default function YouScreen({ navigation }) {
+  const { colors, theme, setTheme } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { prefs, togglePref, displayName, memberSince, healthInputs, transactions, cats } = useSpend();
   const { user, signOut } = useAuth();
 
@@ -58,6 +67,20 @@ export default function YouScreen({ navigation }) {
           <Text style={styles.incomeNote}>Entered manually — SmartSpend doesn't link bank accounts yet.</Text>
         </View>
 
+        <View style={styles.card}>
+          <Text style={styles.kicker}>Appearance</Text>
+          <View style={styles.segWrap}>
+            {THEME_OPTIONS.map(([k, label]) => {
+              const on = theme === k;
+              return (
+                <Pressable key={k} onPress={() => setTheme(k)} style={[styles.segOpt, on && styles.segOptOn]}>
+                  <Text style={[styles.segLabel, on && styles.segLabelOn]}>{label}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
         <View style={[styles.card, { padding: 0, overflow: "hidden" }]}>
           {prefRows.map(([key, n, meta], i) => (
             <View key={key} style={[styles.prefRow, i > 0 && styles.prefDivider]}>
@@ -69,7 +92,7 @@ export default function YouScreen({ navigation }) {
                 value={prefs[key]}
                 onValueChange={() => togglePref(key)}
                 trackColor={{ false: colors.trackAlt, true: colors.accent }}
-                thumbColor={colors.card}
+                thumbColor={colors.onAccent}
               />
             </View>
           ))}
@@ -86,26 +109,33 @@ export default function YouScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  profileRow: { flexDirection: "row", alignItems: "center", gap: 14, paddingHorizontal: 20, paddingTop: 8 },
-  avatar: { width: 62, height: 62, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center" },
-  avatarText: { fontFamily: fonts.heading, fontSize: 24, color: colors.card },
-  name: { fontFamily: fonts.heading, fontSize: 24, color: colors.ink },
-  sub: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.inkSoft, marginTop: 3 },
-  card: { marginHorizontal: 20, marginTop: 20, backgroundColor: colors.card, borderRadius: radii.md, padding: 18 },
-  kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
-  rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  editLink: { fontFamily: fonts.semibold, fontSize: 12, color: colors.accentDark },
-  incomeVal: { fontFamily: fonts.heading, fontSize: 28, color: colors.ink, marginTop: 8 },
-  incomeNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
-  dotSm: { width: 8, height: 8, borderRadius: radii.pill },
-  sourceName: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink },
-  prefRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 15, paddingHorizontal: 18 },
-  prefDivider: { borderTopWidth: 1, borderTopColor: colors.hairline },
-  prefFooterNote: { fontFamily: fonts.regular, fontSize: 11, color: colors.inkFaint, lineHeight: 15, padding: 18, paddingTop: 4 },
-  txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
-  footer: { paddingHorizontal: 20, paddingTop: 24, gap: 9 },
-  footerText: { fontFamily: fonts.regular, fontSize: 12, color: colors.inkFaint },
-  exportLink: { fontFamily: fonts.semibold, fontSize: 13, color: colors.accentDark },
-  signOutLink: { fontFamily: fonts.semibold, fontSize: 13, color: colors.danger }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    profileRow: { flexDirection: "row", alignItems: "center", gap: 14, paddingHorizontal: 20, paddingTop: 8 },
+    avatar: { width: 62, height: 62, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center" },
+    avatarText: { fontFamily: fonts.heading, fontSize: 24, color: colors.onAccent },
+    name: { fontFamily: fonts.heading, fontSize: 24, color: colors.ink },
+    sub: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.inkSoft, marginTop: 3 },
+    card: { marginHorizontal: 20, marginTop: 20, backgroundColor: colors.card, borderRadius: radii.md, padding: 18 },
+    kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
+    rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+    editLink: { fontFamily: fonts.semibold, fontSize: 12, color: colors.accentDark },
+    incomeVal: { fontFamily: fonts.heading, fontSize: 28, color: colors.ink, marginTop: 8 },
+    incomeNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
+    dotSm: { width: 8, height: 8, borderRadius: radii.pill },
+    segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginTop: 12 },
+    segOpt: { flex: 1, alignItems: "center", paddingVertical: 9, borderRadius: radii.pill },
+    segOptOn: { backgroundColor: colors.bg },
+    segLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.inkSoft },
+    segLabelOn: { color: colors.ink },
+    sourceName: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink },
+    prefRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 15, paddingHorizontal: 18 },
+    prefDivider: { borderTopWidth: 1, borderTopColor: colors.hairline },
+    prefFooterNote: { fontFamily: fonts.regular, fontSize: 11, color: colors.inkFaint, lineHeight: 15, padding: 18, paddingTop: 4 },
+    txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
+    footer: { paddingHorizontal: 20, paddingTop: 24, gap: 9 },
+    footerText: { fontFamily: fonts.regular, fontSize: 12, color: colors.inkFaint },
+    exportLink: { fontFamily: fonts.semibold, fontSize: 13, color: colors.accentDark },
+    signOutLink: { fontFamily: fonts.semibold, fontSize: 13, color: colors.danger }
+  });
+}

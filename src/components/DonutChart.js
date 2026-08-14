@@ -1,10 +1,12 @@
 import React from "react";
 import Svg, { Circle } from "react-native-svg";
 import { View, Text, StyleSheet } from "react-native";
-import { colors, fonts } from "../theme";
+import { fonts } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 // Segmented ring: each segment is a stroke-dashoffset arc on a shared circle.
 export default function DonutChart({ segments, size = 132, strokeWidth = 18, centerLabel, centerSub }) {
+  const { colors } = useTheme();
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const total = segments.reduce((a, s) => a + s.value, 0) || 1;
@@ -35,8 +37,8 @@ export default function DonutChart({ segments, size = 132, strokeWidth = 18, cen
       </Svg>
       <View style={StyleSheet.absoluteFillObject}>
         <View style={styles.center}>
-          <Text style={styles.centerLabel}>{centerLabel}</Text>
-          <Text style={styles.centerSub}>{centerSub}</Text>
+          <Text style={[styles.centerLabel, { color: colors.ink }]}>{centerLabel}</Text>
+          <Text style={[styles.centerSub, { color: colors.inkFaint }]}>{centerSub}</Text>
         </View>
       </View>
     </View>
@@ -45,13 +47,12 @@ export default function DonutChart({ segments, size = 132, strokeWidth = 18, cen
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  centerLabel: { fontFamily: fonts.heading, fontSize: 20, color: colors.ink },
+  centerLabel: { fontFamily: fonts.heading, fontSize: 20 },
   centerSub: {
     fontFamily: fonts.semibold,
     fontSize: 9.5,
     letterSpacing: 1,
     textTransform: "uppercase",
-    color: colors.inkFaint,
     marginTop: 4
   }
 });

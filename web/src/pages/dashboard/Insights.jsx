@@ -7,7 +7,7 @@ import "./Insights.css";
 const VIZ = [["rings", "Rings"], ["spine", "Six months"], ["cal", "Calendar"]];
 
 function bucket(v) {
-  if (v === 0) return { bg: "#efe4d0", fg: "rgba(32,30,29,0.35)" };
+  if (v === 0) return { bg: "var(--track)", fg: "rgba(var(--ink-rgb), 0.35)" };
   if (v < 40) return { bg: "#ffe1d0", fg: "#8c491a" };
   if (v < 100) return { bg: "#ffc6a5", fg: "#643312" };
   if (v < 200) return { bg: "#f6a06b", fg: "#402310" };
@@ -71,8 +71,8 @@ export default function Insights() {
             {monthlyTotals.map((m) => (
               <div key={m.m} className="bar-col">
                 <span className="bar-amt">{short(m.v)}</span>
-                <div className="bar" style={{ height: `${(m.v / maxMonth) * 100}%`, background: m.current ? "#c67139" : "#dcd3c4" }} />
-                <span className="bar-month" style={{ color: m.current ? "#8c491a" : undefined }}>{m.m}</span>
+                <div className="bar" style={{ height: `${(m.v / maxMonth) * 100}%`, background: m.current ? "var(--accent)" : "var(--track-alt)" }} />
+                <span className="bar-month" style={{ color: m.current ? "var(--accent-dark)" : undefined }}>{m.m}</span>
               </div>
             ))}
           </div>
@@ -96,9 +96,9 @@ export default function Insights() {
               const day = i + 1;
               const future = day > dayOfMonth;
               const v = future ? 0 : calAmts[day - 1] || 0;
-              const b = future ? { bg: "transparent", fg: "rgba(32,30,29,0.28)" } : bucket(v);
+              const b = future ? { bg: "transparent", fg: "rgba(var(--ink-rgb), 0.28)" } : bucket(v);
               return (
-                <div key={day} className="cal-cell" style={{ background: b.bg, border: future ? "1px dashed rgba(32,30,29,0.16)" : "none" }}>
+                <div key={day} className="cal-cell" style={{ background: b.bg, border: future ? "1px dashed rgba(var(--ink-rgb), 0.16)" : "none" }}>
                   <span className="cal-day" style={{ color: b.fg }}>{day}</span>
                   {!future && <span className="cal-tick" style={{ color: b.fg }}>{v ? Math.round(v) : "·"}</span>}
                 </div>

@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { colors, fonts, radii } from "../theme";
+import { fonts, radii } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt } from "../context/SpendContext";
 import ProgressBar from "../components/ProgressBar";
 import Screen from "../components/Screen";
 
 export default function CategoryDetailScreen({ route, navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { catKey } = route.params;
   const { cats, spentByCat, budgets, transactions, monthlyTotalsByCat, daysLeft } = useSpend();
 
@@ -43,7 +46,7 @@ export default function CategoryDetailScreen({ route, navigation }) {
             <Text style={styles.ofBudget}>{b ? `of ${fmt(b)} budgeted` : "no budget set"}</Text>
           </View>
           <View style={{ marginTop: 16 }}>
-            <ProgressBar pct={pct} color={c.c} bg="rgba(32,30,29,0.12)" height={11} />
+            <ProgressBar pct={pct} color={c.c} bg={colors.tintTrack} height={11} />
           </View>
           <Text style={styles.tintLine}>
             {!b
@@ -91,24 +94,26 @@ export default function CategoryDetailScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  header: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 20, paddingTop: 8, paddingBottom: 14 },
-  backBtn: { width: 38, height: 38, borderRadius: radii.pill, backgroundColor: colors.tint, alignItems: "center", justifyContent: "center" },
-  h1: { fontFamily: fonts.heading, fontSize: 20, color: colors.ink },
-  kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint, marginBottom: 10 },
-  tintCard: { borderRadius: radii.lg, padding: 22 },
-  bigNum: { fontFamily: fonts.heading, fontSize: 40, color: colors.ink },
-  ofBudget: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint, paddingBottom: 6 },
-  tintLine: { fontFamily: fonts.regular, fontSize: 13, lineHeight: 18, color: colors.ink, marginTop: 12 },
-  barsRow: { flexDirection: "row", alignItems: "flex-end", gap: 9, height: 92 },
-  barCol: { flex: 1, alignItems: "center", height: "100%", justifyContent: "flex-end", gap: 6 },
-  bar: { width: "100%", borderRadius: 6, minHeight: 4 },
-  barMonth: { fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
-  card: { backgroundColor: colors.card, borderRadius: radii.md, overflow: "hidden" },
-  emptyText: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkFaint },
-  txRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 13, paddingHorizontal: 16 },
-  txDivider: { borderTopWidth: 1, borderTopColor: colors.hairline },
-  txName: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink },
-  txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
-  txAmt: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    header: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 20, paddingTop: 8, paddingBottom: 14 },
+    backBtn: { width: 38, height: 38, borderRadius: radii.pill, backgroundColor: colors.tint, alignItems: "center", justifyContent: "center" },
+    h1: { fontFamily: fonts.heading, fontSize: 20, color: colors.ink },
+    kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint, marginBottom: 10 },
+    tintCard: { borderRadius: radii.lg, padding: 22 },
+    bigNum: { fontFamily: fonts.heading, fontSize: 40, color: colors.ink },
+    ofBudget: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint, paddingBottom: 6 },
+    tintLine: { fontFamily: fonts.regular, fontSize: 13, lineHeight: 18, color: colors.ink, marginTop: 12 },
+    barsRow: { flexDirection: "row", alignItems: "flex-end", gap: 9, height: 92 },
+    barCol: { flex: 1, alignItems: "center", height: "100%", justifyContent: "flex-end", gap: 6 },
+    bar: { width: "100%", borderRadius: 6, minHeight: 4 },
+    barMonth: { fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
+    card: { backgroundColor: colors.card, borderRadius: radii.md, overflow: "hidden" },
+    emptyText: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkFaint },
+    txRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 13, paddingHorizontal: 16 },
+    txDivider: { borderTopWidth: 1, borderTopColor: colors.hairline },
+    txName: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink },
+    txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
+    txAmt: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink }
+  });
+}

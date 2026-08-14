@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
-import { colors, fonts, radii } from "../../theme";
+import { fonts, radii } from "../../theme";
+import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import Screen from "../../components/Screen";
 
 export default function AuthScreen() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { signIn, signUp } = useAuth();
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
@@ -94,7 +97,7 @@ export default function AuthScreen() {
 
           <Pressable onPress={submit} disabled={busy} style={[styles.submitBtn, busy && { opacity: 0.6 }]}>
             {busy ? (
-              <ActivityIndicator color={colors.card} />
+              <ActivityIndicator color={colors.onAccent} />
             ) : (
               <Text style={styles.submitLabel}>{mode === "signin" ? "Sign in" : "Create account"}</Text>
             )}
@@ -105,30 +108,32 @@ export default function AuthScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: { flex: 1, justifyContent: "center", paddingHorizontal: 24 },
-  logo: { fontFamily: fonts.heading, fontSize: 34, color: colors.ink, textAlign: "center" },
-  tag: { fontFamily: fonts.regular, fontSize: 14, color: colors.inkSoft, textAlign: "center", marginTop: 8, marginBottom: 28 },
-  segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginBottom: 24 },
-  segOpt: { flex: 1, alignItems: "center", paddingVertical: 10, borderRadius: radii.pill },
-  segOptOn: { backgroundColor: colors.card },
-  segLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.inkSoft },
-  segLabelOn: { color: colors.ink },
-  field: { marginBottom: 16 },
-  fieldLabel: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 },
-  input: {
-    backgroundColor: colors.card,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.hairline,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    fontFamily: fonts.regular,
-    fontSize: 15,
-    color: colors.ink
-  },
-  error: { fontFamily: fonts.regular, fontSize: 13, color: colors.danger, marginBottom: 12 },
-  notice: { fontFamily: fonts.regular, fontSize: 13, color: colors.sage, marginBottom: 12 },
-  submitBtn: { height: 54, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center", marginTop: 4 },
-  submitLabel: { fontFamily: fonts.heading, fontSize: 16, color: colors.card }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    wrap: { flex: 1, justifyContent: "center", paddingHorizontal: 24 },
+    logo: { fontFamily: fonts.heading, fontSize: 34, color: colors.ink, textAlign: "center" },
+    tag: { fontFamily: fonts.regular, fontSize: 14, color: colors.inkSoft, textAlign: "center", marginTop: 8, marginBottom: 28 },
+    segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginBottom: 24 },
+    segOpt: { flex: 1, alignItems: "center", paddingVertical: 10, borderRadius: radii.pill },
+    segOptOn: { backgroundColor: colors.card },
+    segLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.inkSoft },
+    segLabelOn: { color: colors.ink },
+    field: { marginBottom: 16 },
+    fieldLabel: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 },
+    input: {
+      backgroundColor: colors.card,
+      borderRadius: radii.md,
+      borderWidth: 1,
+      borderColor: colors.hairline,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      fontFamily: fonts.regular,
+      fontSize: 15,
+      color: colors.ink
+    },
+    error: { fontFamily: fonts.regular, fontSize: 13, color: colors.danger, marginBottom: 12 },
+    notice: { fontFamily: fonts.regular, fontSize: 13, color: colors.sage, marginBottom: 12 },
+    submitBtn: { height: 54, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center", justifyContent: "center", marginTop: 4 },
+    submitLabel: { fontFamily: fonts.heading, fontSize: 16, color: colors.onAccent }
+  });
+}

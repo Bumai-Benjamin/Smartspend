@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { View, Text, TextInput, ScrollView, Pressable, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
 import { Feather } from "@expo/vector-icons";
-import { colors, fonts, radii } from "../theme";
+import { fonts, radii } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt, short } from "../context/SpendContext";
 import ProgressBar from "../components/ProgressBar";
 import Screen from "../components/Screen";
@@ -15,6 +16,8 @@ const TABS = [
 ];
 
 export default function PlanScreen({ route }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const {
     catRows, budgets, setBudgetAmount, allocated, totalBudget,
     subscriptions, addSubscription, deleteSubscription,
@@ -102,6 +105,8 @@ export default function PlanScreen({ route }) {
 }
 
 function BudgetSliderRow({ c, budget, onCommit }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [localValue, setLocalValue] = useState(budget);
   useEffect(() => { setLocalValue(budget); }, [budget]);
 
@@ -142,6 +147,8 @@ function BudgetSliderRow({ c, budget, onCommit }) {
 }
 
 function GoalCard({ goal }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const pct = goal.target ? goal.saved / goal.target : 0;
   return (
     <View style={styles.goalCard}>
@@ -161,6 +168,8 @@ function GoalCard({ goal }) {
 }
 
 function SubsTab({ subscriptions, subsTotal, addSubscription, deleteSubscription }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [adding, setAdding] = useState(false);
   const [name, setName] = useState("");
   const [amt, setAmt] = useState("");
@@ -228,6 +237,8 @@ function SubsTab({ subscriptions, subsTotal, addSubscription, deleteSubscription
 }
 
 function NumberField({ label, value, onCommit, prefix = "$" }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [text, setText] = useState(value != null ? String(value) : "");
   useEffect(() => { setText(value != null ? String(value) : ""); }, [value]);
   return (
@@ -250,6 +261,8 @@ function NumberField({ label, value, onCommit, prefix = "$" }) {
 }
 
 function HealthTab({ healthInputs, updateHealthInputs, emergencyFund, updateEmergencyFund }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   return (
     <View style={{ paddingHorizontal: 20, gap: 20, marginTop: 18 }}>
       <View style={styles.healthCard}>
@@ -278,54 +291,56 @@ function HealthTab({ healthInputs, updateHealthInputs, emergencyFund, updateEmer
   );
 }
 
-const styles = StyleSheet.create({
-  header: { paddingHorizontal: 20, paddingTop: 8 },
-  h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
-  sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
-  segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginHorizontal: 20, marginTop: 18 },
-  segOpt: { flex: 1, alignItems: "center", paddingVertical: 9, borderRadius: radii.pill },
-  segOptOn: { backgroundColor: colors.bg },
-  segLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.inkSoft },
-  segLabelOn: { color: colors.ink },
-  rowCenter: { flexDirection: "row", alignItems: "center", gap: 10 },
-  rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
-  rowLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
-  dotSm: { width: 10, height: 10, borderRadius: radii.pill },
-  budgetCard: { backgroundColor: colors.card, borderRadius: radii.md, padding: 16 },
-  budgetVal: { minWidth: 62, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink },
-  budgetNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
-  allocatedCard: { backgroundColor: colors.tint, borderRadius: radii.md, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
-  allocatedLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },
-  allocatedVal: { fontFamily: fonts.heading, fontSize: 20, color: colors.ink },
-  kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkSoft },
-  subsHero: { backgroundColor: colors.tint, borderRadius: radii.lg, padding: 20 },
-  subsTotal: { fontFamily: fonts.heading, fontSize: 34, color: colors.ink, marginTop: 8 },
-  subsSub: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.inkSoft, marginTop: 6 },
-  subRow: { flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: colors.card, borderRadius: radii.md, padding: 15 },
-  avatar: { width: 38, height: 38, borderRadius: radii.pill, alignItems: "center", justifyContent: "center" },
-  avatarText: { fontFamily: fonts.heading, fontSize: 15, color: colors.card },
-  txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
-  perMo: { fontFamily: fonts.regular, fontSize: 10.5, color: colors.inkFainter, marginTop: 4 },
-  deleteBtn: { padding: 6, marginLeft: 4 },
-  emptyText: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkFaint, textAlign: "center", marginTop: 8 },
-  helperText: { fontFamily: fonts.regular, fontSize: 12, color: colors.inkFaint, textAlign: "center", marginTop: 4 },
-  addRowBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 14, borderRadius: radii.md, borderWidth: 1, borderColor: colors.hairline, borderStyle: "dashed" },
-  addRowBtnText: { fontFamily: fonts.semibold, fontSize: 13, color: colors.accentDark },
-  addCard: { backgroundColor: colors.card, borderRadius: radii.md, padding: 16, gap: 10 },
-  addInput: { backgroundColor: colors.bg, borderRadius: radii.sm, borderWidth: 1, borderColor: colors.hairline, paddingVertical: 11, paddingHorizontal: 13, fontFamily: fonts.regular, fontSize: 14, color: colors.ink },
-  pauseBtn: { flex: 1, paddingVertical: 10, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center" },
-  pauseBtnText: { fontFamily: fonts.heading, fontSize: 13, color: colors.card },
-  keepBtn: { flex: 1, paddingVertical: 10, borderRadius: radii.pill, borderWidth: 1, borderColor: colors.hairline, alignItems: "center" },
-  keepBtnText: { fontFamily: fonts.heading, fontSize: 13, color: colors.ink },
-  goalCard: { backgroundColor: colors.sageBg, borderRadius: radii.md, padding: 20 },
-  goalName: { fontFamily: fonts.heading, fontSize: 18, color: colors.sageDark },
-  goalPct: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sage },
-  goalSaved: { fontFamily: fonts.heading, fontSize: 30, color: colors.sageDark },
-  goalTarget: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sage, paddingBottom: 4 },
-  healthCard: { backgroundColor: colors.card, borderRadius: radii.lg, padding: 18 },
-  fieldRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 },
-  fieldLabel: { flex: 1, fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink },
-  fieldInputWrap: { flexDirection: "row", alignItems: "center", backgroundColor: colors.bg, borderRadius: radii.sm, borderWidth: 1, borderColor: colors.hairline, paddingHorizontal: 12, paddingVertical: 8, minWidth: 110 },
-  fieldPrefix: { fontFamily: fonts.semibold, fontSize: 14, color: colors.inkFaint, marginRight: 4 },
-  fieldInput: { flex: 1, fontFamily: fonts.semibold, fontSize: 14, color: colors.ink, padding: 0, textAlign: "right" }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    header: { paddingHorizontal: 20, paddingTop: 8 },
+    h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
+    sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
+    segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginHorizontal: 20, marginTop: 18 },
+    segOpt: { flex: 1, alignItems: "center", paddingVertical: 9, borderRadius: radii.pill },
+    segOptOn: { backgroundColor: colors.bg },
+    segLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.inkSoft },
+    segLabelOn: { color: colors.ink },
+    rowCenter: { flexDirection: "row", alignItems: "center", gap: 10 },
+    rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+    rowLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.ink },
+    dotSm: { width: 10, height: 10, borderRadius: radii.pill },
+    budgetCard: { backgroundColor: colors.card, borderRadius: radii.md, padding: 16 },
+    budgetVal: { minWidth: 62, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink },
+    budgetNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
+    allocatedCard: { backgroundColor: colors.tint, borderRadius: radii.md, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+    allocatedLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },
+    allocatedVal: { fontFamily: fonts.heading, fontSize: 20, color: colors.ink },
+    kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkSoft },
+    subsHero: { backgroundColor: colors.tint, borderRadius: radii.lg, padding: 20 },
+    subsTotal: { fontFamily: fonts.heading, fontSize: 34, color: colors.ink, marginTop: 8 },
+    subsSub: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.inkSoft, marginTop: 6 },
+    subRow: { flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: colors.card, borderRadius: radii.md, padding: 15 },
+    avatar: { width: 38, height: 38, borderRadius: radii.pill, alignItems: "center", justifyContent: "center" },
+    avatarText: { fontFamily: fonts.heading, fontSize: 15, color: colors.onAccent },
+    txMeta: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 2 },
+    perMo: { fontFamily: fonts.regular, fontSize: 10.5, color: colors.inkFainter, marginTop: 4 },
+    deleteBtn: { padding: 6, marginLeft: 4 },
+    emptyText: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkFaint, textAlign: "center", marginTop: 8 },
+    helperText: { fontFamily: fonts.regular, fontSize: 12, color: colors.inkFaint, textAlign: "center", marginTop: 4 },
+    addRowBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 14, borderRadius: radii.md, borderWidth: 1, borderColor: colors.hairline, borderStyle: "dashed" },
+    addRowBtnText: { fontFamily: fonts.semibold, fontSize: 13, color: colors.accentDark },
+    addCard: { backgroundColor: colors.card, borderRadius: radii.md, padding: 16, gap: 10 },
+    addInput: { backgroundColor: colors.bg, borderRadius: radii.sm, borderWidth: 1, borderColor: colors.hairline, paddingVertical: 11, paddingHorizontal: 13, fontFamily: fonts.regular, fontSize: 14, color: colors.ink },
+    pauseBtn: { flex: 1, paddingVertical: 10, borderRadius: radii.pill, backgroundColor: colors.accent, alignItems: "center" },
+    pauseBtnText: { fontFamily: fonts.heading, fontSize: 13, color: colors.onAccent },
+    keepBtn: { flex: 1, paddingVertical: 10, borderRadius: radii.pill, borderWidth: 1, borderColor: colors.hairline, alignItems: "center" },
+    keepBtnText: { fontFamily: fonts.heading, fontSize: 13, color: colors.ink },
+    goalCard: { backgroundColor: colors.sageBg, borderRadius: radii.md, padding: 20 },
+    goalName: { fontFamily: fonts.heading, fontSize: 18, color: colors.sageDark },
+    goalPct: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sage },
+    goalSaved: { fontFamily: fonts.heading, fontSize: 30, color: colors.sageDark },
+    goalTarget: { fontFamily: fonts.semibold, fontSize: 12, color: colors.sage, paddingBottom: 4 },
+    healthCard: { backgroundColor: colors.card, borderRadius: radii.lg, padding: 18 },
+    fieldRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 },
+    fieldLabel: { flex: 1, fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink },
+    fieldInputWrap: { flexDirection: "row", alignItems: "center", backgroundColor: colors.bg, borderRadius: radii.sm, borderWidth: 1, borderColor: colors.hairline, paddingHorizontal: 12, paddingVertical: 8, minWidth: 110 },
+    fieldPrefix: { fontFamily: fonts.semibold, fontSize: 14, color: colors.inkFaint, marginRight: 4 },
+    fieldInput: { flex: 1, fontFamily: fonts.semibold, fontSize: 14, color: colors.ink, padding: 0, textAlign: "right" }
+  });
+}

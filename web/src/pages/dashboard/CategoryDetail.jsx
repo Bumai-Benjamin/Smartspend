@@ -43,7 +43,7 @@ export default function CategoryDetail() {
           <span className="of-budget">{b ? `of ${fmt(b)} budgeted` : "no budget set"}</span>
         </div>
         <div style={{ marginTop: 16 }}>
-          <ProgressBar pct={pct} color={c.c} bg="rgba(32,30,29,0.12)" height={11} />
+          <ProgressBar pct={pct} color={c.c} bg="rgba(var(--ink-rgb), 0.12)" height={11} />
         </div>
         <p className="tint-line">
           {!b
@@ -61,7 +61,7 @@ export default function CategoryDetail() {
         <div className="cd-bars-row">
           {trend.map((m, i) => (
             <div key={m.m + i} className="cd-bar-col">
-              <div className="cd-bar" style={{ height: `${(m.v / maxTrend) * 100}%`, background: m.current ? c.c : "#dcd3c4" }} />
+              <div className="cd-bar" style={{ height: `${(m.v / maxTrend) * 100}%`, background: m.current ? c.c : "var(--track-alt)" }} />
               <span className="cd-bar-month">{m.m}</span>
             </div>
           ))}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import AddExpenseModal from "../components/AddExpenseModal";
 import LogoMark from "../components/LogoMark";
+import ThemeToggle from "../components/ThemeToggle";
 import "./DashboardLayout.css";
 
 const NAV = [
@@ -37,6 +38,7 @@ export default function DashboardLayout() {
         <div className="dash-sidebar-logo">
           <LogoMark size={30} radius={8} />
           <span>SmartSpend</span>
+          <ThemeToggle className="dash-sidebar-theme" />
         </div>
         <nav className="dash-sidebar-nav">
           {NAV.map(([to, label, icon]) => (

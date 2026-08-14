@@ -112,7 +112,7 @@ function BudgetSliderRow({ c, budget, onCommit }) {
         onKeyUp={commit}
       />
       <div style={{ marginTop: 8 }}>
-        <ProgressBar pct={pct} color={c.c} bg="#e3d8c2" height={8} />
+        <ProgressBar pct={pct} color={c.c} bg="var(--track)" height={8} />
       </div>
       <p className="budget-note" style={c.s > localValue ? { color: "#8c491a" } : undefined}>{note}</p>
     </div>

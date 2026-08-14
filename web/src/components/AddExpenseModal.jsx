@@ -67,7 +67,7 @@ export default function AddExpenseModal({ onClose }) {
           <div>
             <div className="modal-amt-row">
               <span className="modal-dollar">$</span>
-              <span className="modal-amt-display" style={{ color: amtNum > 0 ? "#201e1d" : "rgba(32,30,29,0.35)" }}>{amt || "0"}</span>
+              <span className="modal-amt-display" style={{ color: amtNum > 0 ? "var(--ink)" : "rgba(var(--ink-rgb), 0.35)" }}>{amt || "0"}</span>
             </div>
             <div className="modal-chips-scroll">
               {catKeys.map((k) => (

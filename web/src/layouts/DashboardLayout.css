@@ -1,6 +1,6 @@
 .dash-shell {
   min-height: 100vh;
-  background: #f5ead8;
+  background: var(--bg);
   display: flex;
 }
 
@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     padding: 28px 18px;
-    border-right: 1px solid rgba(32, 30, 29, 0.08);
+    border-right: 1px solid rgba(var(--ink-rgb), 0.08);
     position: sticky;
     top: 0;
     height: 100vh;
@@ -48,16 +48,16 @@
   margin-bottom: 30px;
 }
 
-.dash-sidebar-logo img {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-}
-
 .dash-sidebar-logo span {
   font-family: 'Caprasimo', cursive;
   font-size: 18px;
-  color: #201e1d;
+  color: var(--ink);
+  flex: 1;
+}
+
+.dash-sidebar-theme {
+  width: 32px;
+  height: 32px;
 }
 
 .dash-sidebar-nav {
@@ -76,24 +76,24 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 14px;
-  color: rgba(32, 30, 29, 0.62);
+  color: rgba(var(--ink-rgb), 0.62);
   transition: background 0.12s ease, color 0.12s ease;
 }
 
 .dash-nav-link:hover {
-  background: #eee7db;
+  background: var(--card-hover);
 }
 
 .dash-nav-link.active {
-  background: #f9f4ed;
-  color: #201e1d;
+  background: var(--card);
+  color: var(--ink);
 }
 
 .dash-sidebar-add {
   height: 46px;
   border-radius: 999px;
-  background: #c67139;
-  color: #f9f4ed;
+  background: var(--accent);
+  color: var(--on-accent);
   font-family: 'Caprasimo', cursive;
   font-size: 14px;
 }
@@ -104,8 +104,8 @@
   left: 0;
   right: 0;
   display: flex;
-  background: #f9f4ed;
-  border-top: 1px solid rgba(32, 30, 29, 0.1);
+  background: var(--card);
+  border-top: 1px solid rgba(var(--ink-rgb), 0.1);
   padding: 8px 6px calc(env(safe-area-inset-bottom, 0px) + 8px);
   z-index: 40;
 }
@@ -117,7 +117,7 @@
   align-items: center;
   gap: 3px;
   padding: 6px 0;
-  color: rgba(32, 30, 29, 0.45);
+  color: rgba(var(--ink-rgb), 0.45);
 }
 
 .dash-bottom-link span {
@@ -127,7 +127,7 @@
 }
 
 .dash-bottom-link.active {
-  color: #c67139;
+  color: var(--accent);
 }
 
 .dash-fab {
@@ -137,8 +137,8 @@
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: #c67139;
-  color: #f9f4ed;
+  background: var(--accent);
+  color: var(--on-accent);
   font-size: 26px;
   line-height: 1;
   box-shadow: 0 10px 24px rgba(140, 73, 26, 0.35);

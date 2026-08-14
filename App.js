@@ -7,10 +7,20 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./src/context/AuthContext";
 import { SpendProvider } from "./src/context/SpendContext";
+import { ThemeProvider, useTheme } from "./src/context/ThemeContext";
 import RootNavigator from "./src/navigation/RootNavigator";
-import { colors } from "./src/theme";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
+
+function AppShell({ onLayout }) {
+  const { colors, resolvedScheme } = useTheme();
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.bg }} onLayout={onLayout}>
+      <StatusBar style={resolvedScheme === "dark" ? "light" : "dark"} />
+      <RootNavigator />
+    </View>
+  );
+}
 
 export default function App() {
   const [capLoaded] = useCaprasimo({ Caprasimo_400Regular });
@@ -24,15 +34,14 @@ export default function App() {
   if (!ready) return null;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }} onLayout={onLayout}>
-      <SafeAreaProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
         <AuthProvider>
           <SpendProvider>
-            <StatusBar style="dark" />
-            <RootNavigator />
+            <AppShell onLayout={onLayout} />
           </SpendProvider>
         </AuthProvider>
-      </SafeAreaProvider>
-    </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }

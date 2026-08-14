@@ -1,5 +1,97 @@
 :root {
   color-scheme: light;
+
+  --bg: #f5ead8;
+  --card: #f9f4ed;
+  --card-hover: #eee7db;
+  --ink: #201e1d;
+  --ink-rgb: 32, 30, 29;
+  --on-accent: #f9f4ed;
+
+  --accent: #c67139;
+  --accent-press: #b2622d;
+  --accent-dark: #8c491a;
+
+  --tint: #ebddc5;
+  --tint-warm: #ffe1d0;
+  --track: #e3d8c2;
+  --track-alt: #dcd3c4;
+
+  --sage: #56633f;
+  --sage-dark: #272e1b;
+  --sage-bg: #f0fae1;
+  --sage-track: #ccdbb2;
+  --sage-fill: #728157;
+
+  --warn-bg: #fff2eb;
+  --warn-text: #643312;
+
+  --danger: #a63a2e;
+  --danger-bg: #fbe4dd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg: #17140f;
+    --card: #221d17;
+    --card-hover: #2c251d;
+    --ink: #f4ecdf;
+    --ink-rgb: 244, 236, 223;
+
+    --accent: #d98a54;
+    --accent-press: #c2723e;
+    --accent-dark: #e2a06c;
+
+    --tint: #362a1d;
+    --tint-warm: #43301f;
+    --track: #362d22;
+    --track-alt: #40372c;
+
+    --sage: #8bab5f;
+    --sage-dark: #c3dba0;
+    --sage-bg: #202a17;
+    --sage-track: #2f3d22;
+    --sage-fill: #8bab5f;
+
+    --warn-bg: #3a2a1d;
+    --warn-text: #f0c199;
+
+    --danger: #e2685a;
+    --danger-bg: #3a221d;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #17140f;
+  --card: #221d17;
+  --card-hover: #2c251d;
+  --ink: #f4ecdf;
+  --ink-rgb: 244, 236, 223;
+
+  --accent: #d98a54;
+  --accent-press: #c2723e;
+  --accent-dark: #e2a06c;
+
+  --tint: #362a1d;
+  --tint-warm: #43301f;
+  --track: #362d22;
+  --track-alt: #40372c;
+
+  --sage: #8bab5f;
+  --sage-dark: #c3dba0;
+  --sage-bg: #202a17;
+  --sage-track: #2f3d22;
+  --sage-fill: #8bab5f;
+
+  --warn-bg: #3a2a1d;
+  --warn-text: #f0c199;
+
+  --danger: #e2685a;
+  --danger-bg: #3a221d;
 }
 
 *, *::before, *::after {
@@ -12,11 +104,12 @@ html, body {
 }
 
 body {
-  background: #f5ead8;
-  color: #201e1d;
+  background: var(--bg);
+  color: var(--ink);
   font-family: 'Figtree', sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 #root {
@@ -46,16 +139,16 @@ img {
 }
 
 ::selection {
-  background: #ffe1d0;
-  color: #201e1d;
+  background: var(--tint-warm);
+  color: var(--ink);
 }
 
 .spinner {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 3px solid rgba(32, 30, 29, 0.12);
-  border-top-color: #c67139;
+  border: 3px solid rgba(var(--ink-rgb), 0.12);
+  border-top-color: var(--accent);
   animation: spin 0.8s linear infinite;
 }
 

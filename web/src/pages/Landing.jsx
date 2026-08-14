@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 import LogoMark from "../components/LogoMark";
+import ThemeToggle from "../components/ThemeToggle";
 import "./Landing.css";
 
 const IntroSplash = lazy(() => import("../components/IntroSplash"));
@@ -48,6 +49,7 @@ export default function Landing() {
           <span>SmartSpend</span>
         </div>
         <div className="landing-nav-links">
+          <ThemeToggle />
           <Link to="/login" className="nav-link">Sign in</Link>
           <Link to="/signup" className="nav-cta">Get started</Link>
         </div>

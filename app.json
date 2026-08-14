@@ -4,7 +4,7 @@
     "slug": "smartspend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "backgroundColor": "#f5ead8",
     "icon": "./assets/icon.png",
     "android": {

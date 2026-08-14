@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
-import { colors, fonts, radii } from "../theme";
+import { fonts, radii } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import { useSpend, fmt, short } from "../context/SpendContext";
 import DonutChart from "../components/DonutChart";
 import Screen from "../components/Screen";
@@ -11,8 +12,8 @@ const VIZ = [
   ["cal", "Calendar"]
 ];
 
-function bucket(v) {
-  if (v === 0) return { bg: "#efe4d0", fg: "rgba(32,30,29,0.35)" };
+function bucket(v, colors) {
+  if (v === 0) return { bg: colors.track, fg: colors.inkFainter };
   if (v < 40) return { bg: "#ffe1d0", fg: "#8c491a" };
   if (v < 100) return { bg: "#ffc6a5", fg: "#643312" };
   if (v < 200) return { bg: "#f6a06b", fg: "#402310" };
@@ -20,6 +21,8 @@ function bucket(v) {
 }
 
 export default function InsightsScreen() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { catRows, totalSpent, dayOfMonth, daysInMonth, daysLeft, totalBudget, monthlyTotals, calAmts } = useSpend();
   const [viz, setViz] = useState("rings");
 
@@ -106,13 +109,13 @@ export default function InsightsScreen() {
                 const day = i + 1;
                 const future = day > dayOfMonth;
                 const v = future ? 0 : calAmts[day - 1] || 0;
-                const b = future ? { bg: "transparent", fg: "rgba(32,30,29,0.28)" } : bucket(v);
+                const b = future ? { bg: "transparent", fg: colors.inkFainter } : bucket(v, colors);
                 return (
                   <View
                     key={day}
                     style={[
                       styles.calCell,
-                      { backgroundColor: b.bg, borderWidth: future ? 1 : 0, borderColor: "rgba(32,30,29,0.16)", borderStyle: future ? "dashed" : "solid" }
+                      { backgroundColor: b.bg, borderWidth: future ? 1 : 0, borderColor: colors.hairline, borderStyle: future ? "dashed" : "solid" }
                     ]}
                   >
                     <Text style={[styles.calDay, { color: b.fg }]}>{day}</Text>
@@ -129,31 +132,33 @@ export default function InsightsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  header: { paddingHorizontal: 20, paddingTop: 8 },
-  h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
-  sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
-  segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginHorizontal: 20, marginTop: 18 },
-  segOpt: { flex: 1, alignItems: "center", paddingVertical: 9, borderRadius: radii.pill },
-  segOptOn: { backgroundColor: colors.bg },
-  segLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.inkSoft },
-  segLabelOn: { color: colors.ink },
-  card: { marginHorizontal: 20, marginTop: 20, backgroundColor: colors.card, borderRadius: radii.lg, padding: 22 },
-  legendRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  legendName: { flex: 1, fontFamily: fonts.semibold, fontSize: 12, color: colors.ink },
-  legendShare: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint },
-  dotSm: { width: 9, height: 9, borderRadius: radii.pill },
-  kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
-  barsRow: { flexDirection: "row", alignItems: "flex-end", gap: 10, height: 150, marginTop: 16 },
-  barCol: { flex: 1, alignItems: "center", height: "100%", justifyContent: "flex-end", gap: 7 },
-  bar: { width: "100%", borderRadius: 8, minHeight: 4 },
-  barAmt: { fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
-  barMonth: { fontFamily: fonts.semibold, fontSize: 11, color: colors.inkFaint },
-  hr: { height: 1, backgroundColor: colors.hairline, marginTop: 14, marginBottom: 14 },
-  cardNote: { fontFamily: fonts.regular, fontSize: 12.5, lineHeight: 18, color: colors.inkSoft },
-  calGrid: { flexDirection: "row", flexWrap: "wrap", gap: 6, marginBottom: 6 },
-  calHead: { width: "12%", textAlign: "center", fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
-  calCell: { width: "12%", aspectRatio: 1, borderRadius: 10, alignItems: "center", justifyContent: "center" },
-  calDay: { fontFamily: fonts.semibold, fontSize: 10 },
-  calTick: { fontFamily: fonts.regular, fontSize: 8 }
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    header: { paddingHorizontal: 20, paddingTop: 8 },
+    h1: { fontFamily: fonts.heading, fontSize: 27, color: colors.ink },
+    sub: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 4 },
+    segWrap: { flexDirection: "row", gap: 4, padding: 4, backgroundColor: colors.track, borderRadius: radii.pill, marginHorizontal: 20, marginTop: 18 },
+    segOpt: { flex: 1, alignItems: "center", paddingVertical: 9, borderRadius: radii.pill },
+    segOptOn: { backgroundColor: colors.bg },
+    segLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.inkSoft },
+    segLabelOn: { color: colors.ink },
+    card: { marginHorizontal: 20, marginTop: 20, backgroundColor: colors.card, borderRadius: radii.lg, padding: 22 },
+    legendRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+    legendName: { flex: 1, fontFamily: fonts.semibold, fontSize: 12, color: colors.ink },
+    legendShare: { fontFamily: fonts.semibold, fontSize: 12, color: colors.inkFaint },
+    dotSm: { width: 9, height: 9, borderRadius: radii.pill },
+    kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkFaint },
+    barsRow: { flexDirection: "row", alignItems: "flex-end", gap: 10, height: 150, marginTop: 16 },
+    barCol: { flex: 1, alignItems: "center", height: "100%", justifyContent: "flex-end", gap: 7 },
+    bar: { width: "100%", borderRadius: 8, minHeight: 4 },
+    barAmt: { fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
+    barMonth: { fontFamily: fonts.semibold, fontSize: 11, color: colors.inkFaint },
+    hr: { height: 1, backgroundColor: colors.hairline, marginTop: 14, marginBottom: 14 },
+    cardNote: { fontFamily: fonts.regular, fontSize: 12.5, lineHeight: 18, color: colors.inkSoft },
+    calGrid: { flexDirection: "row", flexWrap: "wrap", gap: 6, marginBottom: 6 },
+    calHead: { width: "12%", textAlign: "center", fontFamily: fonts.semibold, fontSize: 10, color: colors.inkFaint },
+    calCell: { width: "12%", aspectRatio: 1, borderRadius: 10, alignItems: "center", justifyContent: "center" },
+    calDay: { fontFamily: fonts.semibold, fontSize: 10 },
+    calTick: { fontFamily: fonts.regular, fontSize: 8 }
+  });
+}

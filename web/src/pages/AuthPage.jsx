@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import LogoMark from "../components/LogoMark";
+import ThemeToggle from "../components/ThemeToggle";
 import "./AuthPage.css";
 
 export default function AuthPage({ mode: initialMode }) {
@@ -45,10 +46,13 @@ export default function AuthPage({ mode: initialMode }) {
 
   return (
     <div className="auth-screen">
-      <Link to="/" className="auth-logo-link">
-        <LogoMark size={36} radius={10} />
-        <span className="auth-logo-text">SmartSpend</span>
-      </Link>
+      <div className="auth-top-row">
+        <Link to="/" className="auth-logo-link">
+          <LogoMark size={36} radius={10} />
+          <span className="auth-logo-text">SmartSpend</span>
+        </Link>
+        <ThemeToggle />
+      </div>
 
       <form className="auth-card" onSubmit={submit}>
         <h1 className="auth-title">{mode === "signin" ? "Welcome back" : "Let's set up your budget"}</h1>

@@ -2,8 +2,11 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSpend, fmt } from "../../context/SpendContext";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import "./dashboard.css";
 import "./You.css";
+
+const THEME_OPTIONS = [["system", "System"], ["light", "Light"], ["dark", "Dark"]];
 
 function monthsSince(date) {
   if (!date) return 0;
@@ -14,6 +17,7 @@ function monthsSince(date) {
 export default function You() {
   const { prefs, togglePref, displayName, memberSince, healthInputs, transactions, cats } = useSpend();
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
 
   const prefRows = [
@@ -63,6 +67,15 @@ export default function You() {
         </div>
         <p className="income-val">{fmt(Number(healthInputs?.income || 0))}</p>
         <p className="income-note">Entered manually — SmartSpend doesn't link bank accounts yet.</p>
+      </div>
+
+      <div className="card">
+        <p className="kicker" style={{ margin: 0 }}>Appearance</p>
+        <div className="seg-wrap" style={{ marginTop: 12, marginLeft: 0, marginRight: 0 }}>
+          {THEME_OPTIONS.map(([k, label]) => (
+            <button key={k} className={`seg-opt ${theme === k ? "active" : ""}`} onClick={() => setTheme(k)}>{label}</button>
+          ))}
+        </div>
       </div>
 
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>

@@ -6,7 +6,7 @@
 }
 
 .budget-card, .goal-card, .health-form-card {
-  background: #f9f4ed;
+  background: var(--card);
   border-radius: 22px;
   padding: 16px;
 }
@@ -23,18 +23,18 @@
   text-align: right;
   font-family: 'Caprasimo', cursive;
   font-size: 16px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .budget-note {
   font-family: 'Figtree', sans-serif;
   font-size: 11.5px;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin: 6px 0 0;
 }
 
 .allocated-card {
-  background: #ebddc5;
+  background: var(--tint);
   border-radius: 22px;
   padding: 16px;
   display: flex;
@@ -46,17 +46,17 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 13px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .allocated-val {
   font-family: 'Caprasimo', cursive;
   font-size: 20px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .subs-hero {
-  background: #ebddc5;
+  background: var(--tint);
   border-radius: 28px;
   padding: 20px;
 }
@@ -64,14 +64,14 @@
 .subs-total {
   font-family: 'Caprasimo', cursive;
   font-size: 34px;
-  color: #201e1d;
+  color: var(--ink);
   margin: 8px 0 0;
 }
 
 .subs-sub {
   font-family: 'Figtree', sans-serif;
   font-size: 12.5px;
-  color: rgba(32, 30, 29, 0.62);
+  color: rgba(var(--ink-rgb), 0.62);
   margin: 6px 0 0;
 }
 
@@ -79,7 +79,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #f9f4ed;
+  background: var(--card);
   border-radius: 22px;
   padding: 15px;
 }
@@ -93,33 +93,33 @@
   justify-content: center;
   font-family: 'Caprasimo', cursive;
   font-size: 15px;
-  color: #f9f4ed;
+  color: var(--on-accent);
   flex-shrink: 0;
 }
 
 .per-mo {
   font-family: 'Figtree', sans-serif;
   font-size: 10.5px;
-  color: rgba(32, 30, 29, 0.35);
+  color: rgba(var(--ink-rgb), 0.35);
   margin: 4px 0 0;
 }
 
 .delete-btn {
   padding: 6px;
   margin-left: 4px;
-  color: rgba(32, 30, 29, 0.4);
+  color: rgba(var(--ink-rgb), 0.4);
   font-size: 13px;
   flex-shrink: 0;
 }
 
 .delete-btn:hover {
-  color: #a63a2e;
+  color: var(--danger);
 }
 
 .helper-text {
   font-family: 'Figtree', sans-serif;
   font-size: 12px;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   text-align: center;
   margin: 4px 0 0;
 }
@@ -127,16 +127,16 @@
 .add-row-btn {
   padding: 14px;
   border-radius: 22px;
-  border: 1px dashed rgba(32, 30, 29, 0.2);
+  border: 1px dashed rgba(var(--ink-rgb), 0.2);
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 13px;
-  color: #8c491a;
+  color: var(--accent-dark);
   text-align: center;
 }
 
 .add-card {
-  background: #f9f4ed;
+  background: var(--card);
   border-radius: 22px;
   padding: 16px;
   display: flex;
@@ -145,21 +145,21 @@
 }
 
 .add-input {
-  background: #f5ead8;
+  background: var(--bg);
   border-radius: 14px;
-  border: 1px solid rgba(32, 30, 29, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   padding: 11px 13px;
   font-family: 'Figtree', sans-serif;
   font-size: 14px;
-  color: #201e1d;
+  color: var(--ink);
   width: 100%;
 }
 
 .btn-primary {
   padding: 10px;
   border-radius: 999px;
-  background: #c67139;
-  color: #f9f4ed;
+  background: var(--accent);
+  color: var(--on-accent);
   font-family: 'Caprasimo', cursive;
   font-size: 13px;
 }
@@ -167,40 +167,40 @@
 .btn-secondary {
   padding: 10px;
   border-radius: 999px;
-  border: 1px solid rgba(32, 30, 29, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   font-family: 'Caprasimo', cursive;
   font-size: 13px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .goal-card {
-  background: #f0fae1;
+  background: var(--sage-bg);
 }
 
 .goal-name {
   font-family: 'Caprasimo', cursive;
   font-size: 18px;
-  color: #272e1b;
+  color: var(--sage-dark);
 }
 
 .goal-pct {
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 12px;
-  color: #56633f;
+  color: var(--sage);
 }
 
 .goal-saved {
   font-family: 'Caprasimo', cursive;
   font-size: 30px;
-  color: #272e1b;
+  color: var(--sage-dark);
 }
 
 .goal-target {
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 12px;
-  color: #56633f;
+  color: var(--sage);
   padding-bottom: 4px;
 }
 
@@ -223,15 +223,15 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 13.5px;
-  color: #201e1d;
+  color: var(--ink);
 }
 
 .field-input-wrap {
   display: flex;
   align-items: center;
-  background: #f5ead8;
+  background: var(--bg);
   border-radius: 14px;
-  border: 1px solid rgba(32, 30, 29, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   padding: 8px 12px;
   min-width: 130px;
 }
@@ -240,7 +240,7 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 14px;
-  color: rgba(32, 30, 29, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin-right: 4px;
 }
 
@@ -249,7 +249,7 @@
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
   font-size: 14px;
-  color: #201e1d;
+  color: var(--ink);
   text-align: right;
   background: none;
   min-width: 0;
