@@ -156,7 +156,7 @@ function GoalCard({ goal }) {
         <span className="goal-name">{goal.name}</span>
         <span className="goal-pct">{Math.round(pct * 100)}%</span>
       </div>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginTop: 10 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: 8, marginTop: 10 }}>
         <span className="goal-saved">{short(goal.saved)}</span>
         <span className="goal-target">of {short(goal.target)}</span>
       </div>

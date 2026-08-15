@@ -38,7 +38,7 @@ export default function CategoryDetail() {
 
       <div className="tint-card">
         <p className="kicker">Spent this month</p>
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 10, marginTop: 8 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: 10, marginTop: 8 }}>
           <span className="big-num">{fmt(s)}</span>
           <span className="of-budget">{b ? `of ${fmt(b)} budgeted` : "no budget set"}</span>
         </div>

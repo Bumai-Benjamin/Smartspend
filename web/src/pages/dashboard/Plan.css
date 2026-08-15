@@ -54,8 +54,10 @@
   border-radius: 22px;
   padding: 16px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
+  gap: 6px;
 }
 
 .allocated-label {

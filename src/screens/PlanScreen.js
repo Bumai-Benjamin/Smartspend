@@ -186,7 +186,7 @@ function GoalCard({ goal }) {
         <Text style={styles.goalName}>{goal.name}</Text>
         <Text style={styles.goalPct}>{Math.round(pct * 100)}%</Text>
       </View>
-      <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8, marginTop: 10 }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-end", gap: 8, marginTop: 10 }}>
         <Text style={styles.goalSaved}>{short(goal.saved)}</Text>
         <Text style={styles.goalTarget}>of {short(goal.target)}</Text>
       </View>
@@ -339,7 +339,7 @@ function makeStyles(colors) {
     budgetVal: { minWidth: 62, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink },
     budgetValInput: { minWidth: 90, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink, backgroundColor: colors.bg, borderWidth: 1.5, borderColor: colors.accent, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2 },
     budgetNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
-    allocatedCard: { backgroundColor: colors.tint, borderRadius: radii.md, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+    allocatedCard: { backgroundColor: colors.tint, borderRadius: radii.md, padding: 16, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline" },
     allocatedLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },
     allocatedVal: { fontFamily: fonts.heading, fontSize: 20, color: colors.ink },
     kicker: { fontFamily: fonts.regular, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.inkSoft },

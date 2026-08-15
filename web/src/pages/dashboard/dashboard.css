@@ -99,6 +99,7 @@
 
 .hero-num-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   gap: 10px;
   margin-top: 8px;
@@ -109,6 +110,7 @@
   font-size: 44px;
   letter-spacing: -1px;
   color: var(--ink);
+  word-break: break-word;
 }
 
 .hero-sub {

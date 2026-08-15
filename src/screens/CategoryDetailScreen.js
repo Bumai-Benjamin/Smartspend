@@ -41,7 +41,7 @@ export default function CategoryDetailScreen({ route, navigation }) {
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 28, gap: 18 }}>
         <View style={[styles.tintCard, { backgroundColor: colors.tint }]}>
           <Text style={styles.kicker}>Spent this month</Text>
-          <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 10, marginTop: 8 }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-end", gap: 10, marginTop: 8 }}>
             <Text style={styles.bigNum}>{fmt(s)}</Text>
             <Text style={styles.ofBudget}>{b ? `of ${fmt(b)} budgeted` : "no budget set"}</Text>
           </View>

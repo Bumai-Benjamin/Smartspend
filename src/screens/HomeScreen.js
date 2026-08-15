@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.hero}>
           <Text style={styles.kicker}>Left to spend</Text>
-          <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 10, marginTop: 8 }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-end", gap: 10, marginTop: 8 }}>
             <Text style={styles.heroNum}>{fmt(left)}</Text>
             <Text style={styles.heroSub}>of {short(totalBudget)} · {daysLeft} days to go</Text>
           </View>
