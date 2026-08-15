@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 11px 12px;
+  padding: 8px 12px;
   border-radius: 14px;
   font-family: 'Figtree', sans-serif;
   font-weight: 600;
@@ -87,6 +87,33 @@
 .dash-nav-link.active {
   background: var(--card);
   color: var(--ink);
+}
+
+.dash-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+  transition: background 0.15s ease;
+}
+
+.dash-nav-link.active .dash-nav-icon {
+  background: var(--tint);
+  color: var(--accent-dark);
+}
+
+.dash-nav-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dash-nav-link.active .dash-nav-avatar {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .dash-sidebar-add {
@@ -115,8 +142,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 6px 0;
+  gap: 2px;
+  padding: 2px 0;
   color: rgba(var(--ink-rgb), 0.45);
 }
 
@@ -128,6 +155,30 @@
 
 .dash-bottom-link.active {
   color: var(--accent);
+}
+
+.dash-bottom-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 26px;
+  border-radius: 13px;
+  transition: background 0.15s ease;
+}
+
+.dash-bottom-link.active .dash-bottom-icon {
+  background: var(--tint);
+}
+
+.dash-bottom-icon .dash-nav-avatar {
+  width: 20px;
+  height: 20px;
+}
+
+.dash-bottom-link.active .dash-bottom-icon .dash-nav-avatar {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .dash-fab {

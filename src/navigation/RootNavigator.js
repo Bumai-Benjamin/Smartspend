@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, Image, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -32,6 +32,7 @@ const ICONS = {
 
 function Tabs() {
   const { colors } = useTheme();
+  const { avatarUrl } = useSpend();
   const insets = useSafeAreaInsets();
   const tabBarBottomPad = Math.max(insets.bottom, 12);
 
@@ -51,7 +52,18 @@ function Tabs() {
           paddingRight: insets.right
         },
         tabBarLabelStyle: { fontSize: 10, fontFamily: "Figtree_600SemiBold" },
-        tabBarIcon: ({ color, size }) => <Feather name={ICONS[route.name]} size={size ? size - 1 : 22} color={color} />
+        tabBarIcon: ({ focused, color, size }) => (
+          <View style={{ width: 40, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center", backgroundColor: focused ? colors.tint : "transparent" }}>
+            {route.name === "You" && avatarUrl ? (
+              <Image
+                source={{ uri: avatarUrl }}
+                style={{ width: 20, height: 20, borderRadius: 10, borderWidth: focused ? 1.5 : 0, borderColor: colors.accent }}
+              />
+            ) : (
+              <Feather name={ICONS[route.name]} size={size ? size - 1 : 22} color={color} />
+            )}
+          </View>
+        )
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />

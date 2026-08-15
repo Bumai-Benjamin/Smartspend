@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useSpend } from "../context/SpendContext";
 import AddExpenseModal from "../components/AddExpenseModal";
 import LogoMark from "../components/LogoMark";
 import ThemeToggle from "../components/ThemeToggle";
@@ -21,7 +22,10 @@ const ICONS = {
   you: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21a8 8 0 0 1 16 0"
 };
 
-function Icon({ name }) {
+function Icon({ name, avatarUrl }) {
+  if (name === "you" && avatarUrl) {
+    return <img src={avatarUrl} alt="" className="dash-nav-avatar" />;
+  }
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d={ICONS[name]} />
@@ -31,6 +35,7 @@ function Icon({ name }) {
 
 export default function DashboardLayout() {
   const [addOpen, setAddOpen] = useState(false);
+  const { avatarUrl } = useSpend();
 
   return (
     <div className="dash-shell">
@@ -43,7 +48,9 @@ export default function DashboardLayout() {
         <nav className="dash-sidebar-nav">
           {NAV.map(([to, label, icon]) => (
             <NavLink key={to} to={to} end={to === "/app"} className={({ isActive }) => `dash-nav-link ${isActive ? "active" : ""}`}>
-              <Icon name={icon} />
+              <span className="dash-nav-icon">
+                <Icon name={icon} avatarUrl={icon === "you" ? avatarUrl : undefined} />
+              </span>
               {label}
             </NavLink>
           ))}
@@ -58,7 +65,9 @@ export default function DashboardLayout() {
       <nav className="dash-bottom-nav">
         {NAV.map(([to, label, icon]) => (
           <NavLink key={to} to={to} end={to === "/app"} className={({ isActive }) => `dash-bottom-link ${isActive ? "active" : ""}`}>
-            <Icon name={icon} />
+            <span className="dash-bottom-icon">
+              <Icon name={icon} avatarUrl={icon === "you" ? avatarUrl : undefined} />
+            </span>
             <span>{label}</span>
           </NavLink>
         ))}
