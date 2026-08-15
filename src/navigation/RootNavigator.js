@@ -17,6 +17,7 @@ import YouScreen from "../screens/YouScreen";
 import CategoryDetailScreen from "../screens/CategoryDetailScreen";
 import AddExpenseScreen from "../screens/AddExpenseScreen";
 import AuthScreen from "../screens/auth/AuthScreen";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
@@ -65,7 +66,7 @@ function Tabs() {
 export default function RootNavigator() {
   const { colors } = useTheme();
   const { session, loading: authLoading } = useAuth();
-  const { loading: spendLoading } = useSpend();
+  const { loading: spendLoading, onboarded } = useSpend();
   const loading = authLoading || (!!session && spendLoading);
 
   if (loading) {
@@ -81,6 +82,8 @@ export default function RootNavigator() {
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {!session ? (
           <RootStack.Screen name="Auth" component={AuthScreen} />
+        ) : !onboarded ? (
+          <RootStack.Screen name="Onboarding" component={OnboardingScreen} />
         ) : (
           <>
             <RootStack.Screen name="Tabs" component={Tabs} />

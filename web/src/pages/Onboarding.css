@@ -1,0 +1,80 @@
+.onboarding-card {
+  text-align: center;
+}
+
+.onboarding-sub {
+  font-family: 'Figtree', sans-serif;
+  font-size: 13px;
+  color: rgba(var(--ink-rgb), 0.62);
+  margin: -12px 0 22px;
+}
+
+.onboarding-avatar-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.onboarding-avatar {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Caprasimo', cursive;
+  font-size: 30px;
+  color: var(--on-accent);
+  overflow: hidden;
+}
+
+.onboarding-avatar:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.onboarding-avatar .avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.onboarding-avatar .avatar-edit-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.avatar-file-input {
+  display: none;
+}
+
+.onboarding-skip {
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: rgba(var(--ink-rgb), 0.5);
+}
+
+.onboarding-skip:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

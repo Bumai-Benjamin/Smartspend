@@ -83,7 +83,7 @@ export function SpendProvider({ children }) {
     setLoading(true);
     (async () => {
       const [profileRes, budgetsRes, txRes, goalsRes, subsRes, healthRes] = await Promise.all([
-        supabase.from("profiles").select("display_name, avatar_url, prefs, created_at").eq("id", user.id).single(),
+        supabase.from("profiles").select("display_name, avatar_url, onboarded, prefs, created_at").eq("id", user.id).single(),
         supabase.from("budgets").select("category_key, amount").eq("user_id", user.id),
         supabase
           .from("transactions")
@@ -97,7 +97,7 @@ export function SpendProvider({ children }) {
       ]);
       if (cancelled) return;
 
-      setProfile(profileRes.data || { display_name: "You", avatar_url: null, prefs: DEFAULT_PREFS });
+      setProfile(profileRes.data || { display_name: "You", avatar_url: null, onboarded: false, prefs: DEFAULT_PREFS });
 
       const b = {};
       (budgetsRes.data || []).forEach((row) => { b[row.category_key] = Number(row.amount); });
@@ -412,6 +412,7 @@ export function SpendProvider({ children }) {
     loading,
     displayName: profile?.display_name || "You",
     avatarUrl: profile?.avatar_url || null,
+    onboarded: profile?.onboarded ?? false,
     updateProfile,
     uploadAvatar,
     memberSince: profile?.created_at ? new Date(profile.created_at) : null,

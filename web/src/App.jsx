@@ -6,6 +6,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import AuthPage from "./pages/AuthPage";
+import Onboarding from "./pages/Onboarding";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Home from "./pages/dashboard/Home";
 import Activity from "./pages/dashboard/Activity";
@@ -24,6 +25,14 @@ export default function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<AuthPage mode="signin" />} />
               <Route path="/signup" element={<AuthPage mode="signup" />} />
+              <Route
+                path="/app/welcome"
+                element={
+                  <ProtectedRoute>
+                    <Onboarding />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/app"
                 element={
