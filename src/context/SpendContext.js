@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useMemo, useState, useCallback, useEffect } from "react";
+import * as FileSystem from "expo-file-system";
+import { decode as decodeBase64 } from "base64-arraybuffer";
 import { CATS } from "../data";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "./AuthContext";
@@ -166,11 +168,11 @@ export function SpendProvider({ children }) {
     if (!user || !uri) return;
     const ext = (uri.split(".").pop() || "jpg").split("?")[0].toLowerCase();
     const path = `${user.id}/avatar.${ext}`;
-    const response = await fetch(uri);
-    const blob = await response.blob();
+    const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    const arrayBuffer = decodeBase64(base64);
     const { error: uploadError } = await supabase.storage
       .from("avatars")
-      .upload(path, blob, { contentType: blob.type || `image/${ext === "jpg" ? "jpeg" : ext}`, upsert: true });
+      .upload(path, arrayBuffer, { contentType: `image/${ext === "jpg" ? "jpeg" : ext}`, upsert: true });
     if (uploadError) { console.warn(uploadError.message); return; }
     const { data } = supabase.storage.from("avatars").getPublicUrl(path);
     updateProfile({ avatar_url: `${data.publicUrl}?t=${Date.now()}` });
