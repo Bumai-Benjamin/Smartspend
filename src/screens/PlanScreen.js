@@ -108,7 +108,11 @@ function BudgetSliderRow({ c, budget, onCommit }) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [localValue, setLocalValue] = useState(budget);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(budget ? String(budget) : "");
   useEffect(() => { setLocalValue(budget); }, [budget]);
+
+  const sliderMax = Math.max(c.max || 1000, Math.ceil(((localValue || 0) * 1.2 || 100) / 100) * 100);
 
   const pct = localValue ? Math.min(c.s / localValue, 1) : 0;
   const note = !localValue
@@ -119,18 +123,44 @@ function BudgetSliderRow({ c, budget, onCommit }) {
     ? `${fmt(localValue - c.s)} left — getting thin`
     : `${fmt(localValue - c.s)} left of ${short(localValue)}`;
 
+  function startEdit() {
+    setDraft(localValue ? String(localValue) : "");
+    setEditing(true);
+  }
+
+  function commitDraft() {
+    setEditing(false);
+    const next = Math.max(0, Math.round(parseFloat(draft) || 0));
+    setLocalValue(next);
+    onCommit(next);
+  }
+
   return (
     <View style={styles.budgetCard}>
       <View style={styles.rowCenter}>
         <View style={[styles.dotSm, { backgroundColor: c.c }]} />
         <Text style={[styles.rowLabel, { flex: 1 }]}>{c.n}</Text>
-        <Text style={styles.budgetVal}>{short(localValue)}</Text>
+        {editing ? (
+          <TextInput
+            style={styles.budgetValInput}
+            value={draft}
+            onChangeText={setDraft}
+            onBlur={commitDraft}
+            onSubmitEditing={commitDraft}
+            keyboardType="decimal-pad"
+            autoFocus
+          />
+        ) : (
+          <Pressable onPress={startEdit}>
+            <Text style={styles.budgetVal}>{short(localValue)}</Text>
+          </Pressable>
+        )}
       </View>
       <Slider
         style={{ marginTop: 10, height: 32 }}
         value={budget}
         minimumValue={0}
-        maximumValue={c.max || 1000}
+        maximumValue={sliderMax}
         step={5}
         minimumTrackTintColor={c.c}
         maximumTrackTintColor={colors.track}
@@ -307,6 +337,7 @@ function makeStyles(colors) {
     dotSm: { width: 10, height: 10, borderRadius: radii.pill },
     budgetCard: { backgroundColor: colors.card, borderRadius: radii.md, padding: 16 },
     budgetVal: { minWidth: 62, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink },
+    budgetValInput: { minWidth: 90, textAlign: "right", fontFamily: fonts.heading, fontSize: 16, color: colors.ink, backgroundColor: colors.bg, borderWidth: 1.5, borderColor: colors.accent, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2 },
     budgetNote: { fontFamily: fonts.regular, fontSize: 11.5, color: colors.inkFaint, marginTop: 6 },
     allocatedCard: { backgroundColor: colors.tint, borderRadius: radii.md, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
     allocatedLabel: { fontFamily: fonts.semibold, fontSize: 13, color: colors.ink },

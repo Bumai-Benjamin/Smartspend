@@ -76,7 +76,11 @@ export default function Plan() {
 
 function BudgetSliderRow({ c, budget, onCommit }) {
   const [localValue, setLocalValue] = useState(budget);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(String(budget || ""));
   useEffect(() => { setLocalValue(budget); }, [budget]);
+
+  const sliderMax = Math.max(c.max || 1000, Math.ceil(((localValue || 0) * 1.2 || 100) / 100) * 100);
 
   const pct = localValue ? Math.min(c.s / localValue, 1) : 0;
   const note = !localValue
@@ -91,18 +95,43 @@ function BudgetSliderRow({ c, budget, onCommit }) {
     onCommit(Number(e.target.value));
   }
 
+  function startEdit() {
+    setDraft(String(localValue || ""));
+    setEditing(true);
+  }
+
+  function commitDraft() {
+    setEditing(false);
+    const next = Math.max(0, Math.round(Number(draft) || 0));
+    setLocalValue(next);
+    onCommit(next);
+  }
+
   return (
     <div className="budget-card">
       <div className="row-center" style={{ gap: 10 }}>
         <span className="dot-sm" style={{ background: c.c }} />
         <span className="row-label" style={{ flex: 1 }}>{c.n}</span>
-        <span className="budget-val">{short(localValue)}</span>
+        {editing ? (
+          <input
+            type="number"
+            className="budget-val-input"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={commitDraft}
+            onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); if (e.key === "Escape") setEditing(false); }}
+            autoFocus
+            min={0}
+          />
+        ) : (
+          <button type="button" className="budget-val" onClick={startEdit}>{short(localValue)}</button>
+        )}
       </div>
       <input
         type="range"
         className="budget-slider"
         min={0}
-        max={c.max || 1000}
+        max={sliderMax}
         step={5}
         value={localValue}
         style={{ accentColor: c.c }}
